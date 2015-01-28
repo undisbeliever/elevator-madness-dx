@@ -1,0 +1,94 @@
+<project>
+<tileset id="player" format="TILES_4BPP" filename="player-tiles.4bpp"></tileset>
+<frameset id="player">
+	<framedescription id="standRight" name="Facing right"/>
+	<framedescription id="walkRight" name="Facing right, moving legs"/>
+	<framedescription id="turnRight" name="Turning - facing right"/>
+	<framedescription id="jumpRight" name="Jumping - facing right"/>
+	<framedescription id="fallRight" name="Falling - facing right"/>
+	<framedescription id="pushButtonRight" name="Pressing Button - facing right"/>
+	<framedescription id="zappedRight" name="Zapped - facing right"/>
+	<framedescription id="standLeft" name="Facing left"/>
+	<framedescription id="walkLeft" name="Facing Left, moving legs"/>
+	<framedescription id="turnLeft" name="Turning - facing left"/>
+	<framedescription id="jumpLeft" name="Jumping - facing left"/>
+	<framedescription id="fallLeft" name="Falling - facing left"/>
+	<framedescription id="pushButtonLeft" name="Pressing Button - facing left"/>
+	<framedescription id="zappedLeft" name="Zapped - facing left"/>
+</frameset>
+<spritegroup id="elevator">
+	<sprite id="player" frameset="player" tileset="player">
+		<frame implements="standRight">
+			<object xpos="-8" ypos="-24" tile="0" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="1" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="2" size="big" order="2" />
+		</frame>
+		<frame implements="walkRight">
+			<object xpos="-8" ypos="-24" tile="0" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="1" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="4" size="big" order="2" />
+		</frame>
+		<frame implements="turnRight">
+			<object xpos="-8" ypos="-24" tile="0" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="1" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="6" size="big" order="2" />
+		</frame>
+		<frame implements="jumpRight">
+			<object xpos="-8" ypos="-24" tile="0" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="1" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="8" size="big" order="2" />
+		</frame>
+		<frame implements="fallRight">
+			<object xpos="-8" ypos="-24" tile="0" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="1" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="10" size="big" order="2" />
+		</frame>
+		<frame implements="pushButtonRight">
+			<object xpos="-8" ypos="-24" tile="0" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="1" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="12" size="big" order="2" />
+		</frame>
+		<frame implements="zappedRight">
+			<object xpos="-8" ypos="-24" tile="16" size="small" order="2" />
+			<object xpos="0" ypos="-24" tile="17" size="small" order="2" />
+			<object xpos="-8" ypos="-16" tile="14" size="big" order="2" />
+		</frame>
+		<frame implements="standLeft">
+			<object xpos="-8" ypos="-24" tile="1" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="0" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="2" size="big" vflip="vflip" order="2" />
+		</frame>
+		<frame implements="walkLeft">
+			<object xpos="-8" ypos="-24" tile="1" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="0" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="4" size="big" vflip="vflip" order="2" />
+		</frame>
+		<frame implements="turnLeft">
+			<object xpos="-8" ypos="-24" tile="1" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="0" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="6" size="big" vflip="vflip" order="2" />
+		</frame>
+		<frame implements="jumpLeft">
+			<object xpos="-8" ypos="-24" tile="1" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="0" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="8" size="big" vflip="vflip" order="2" />
+		</frame>
+		<frame implements="fallLeft">
+			<object xpos="-8" ypos="-24" tile="1" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="0" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="10" size="big" vflip="vflip" order="2" />
+		</frame>
+		<frame implements="pushButtonLeft">
+			<object xpos="-8" ypos="-24" tile="1" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="0" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="12" size="big" vflip="vflip" order="2" />
+		</frame>
+		<frame implements="zappedLeft">
+			<object xpos="-8" ypos="-24" tile="17" size="small" vflip="vflip" order="2" />
+			<object xpos="0" ypos="-24" tile="16" size="small" vflip="vflip" order="2" />
+			<object xpos="-8" ypos="-16" tile="14" size="big" vflip="vflip" order="2" />
+		</frame>
+	</sprite>
+</spritegroup>
+</project>
+
