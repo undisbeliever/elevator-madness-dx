@@ -1,7 +1,7 @@
 
 META = elevator.metasprite.h elevator.metasprite-table.inc elevator.metasprite-data.inc
 MAPS = background.map
-TILES = player-tiles.4bpp foreground-tiles.4bpp background.4bpp
+TILES = player-tiles.4bpp interactive-tiles.4bpp background.4bpp
 PALETTES =  $(patsubst %.2bpp,%.clr,$(patsubst %.4bpp,%.clr,$(SOURCES)))
 
 .PHONY: ALL

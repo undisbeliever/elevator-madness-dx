@@ -10,8 +10,8 @@
 IMPORT_BINARY backgroundMap
 IMPORT_BINARY backgroundTiles
 IMPORT_BINARY backgroundPalette
-IMPORT_BINARY foregroundTiles
-IMPORT_BINARY foregroundPalette
+IMPORT_BINARY interactiveTiles
+IMPORT_BINARY interactivePalette
 IMPORT_BINARY playerTiles
 IMPORT_BINARY playerPalette
 

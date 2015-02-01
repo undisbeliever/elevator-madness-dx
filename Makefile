@@ -1,6 +1,6 @@
 
 BINARY      = bin/Elevator_Madess_DX.sfc
-API_MODULES = reset-snes block screen metasprite
+API_MODULES = reset-snes block screen metasprite math
 API_DIR     = snesdev-common
 CONFIG      = LOROM_1MBit
 

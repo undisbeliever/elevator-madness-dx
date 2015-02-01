@@ -41,10 +41,30 @@ GAME_OAM_SIZE	= OBSEL_SIZE_8_16
 GAME_OAM_NAME	= 0
 
 
+
+
+N_STRIKES = 3
+
+
+
+SCORE_DIGIT_DELTA 	= 16
+SCORE_TILE_COLUMN	= 2
+SCORE_TILE_ROW		= 14
+SCORE_TILE_ATTR 	= 7 << TILEMAP_HIGH_PALETTE_SHIFT
+
+
+.global	interactiveBgBuffer
+.global updateBgBufferOnZero
+
 IMPORT_MODULE Game
+	;; The Number of strikes the player has
 	BYTE	strikes
+
+	;; The player's current score
 	WORD	score
 
+	;; The new buttons pressed by player 1 in this frame
+	WORD	buttonsPressed
 
 	;; Initializes the game.
 	ROUTINE Init

@@ -2,6 +2,7 @@
 
 .include "game.h"
 .include "player.h"
+.include "elevators.h"
 
 MODULE Player
 
@@ -25,6 +26,7 @@ MODULE Player
 LABEL PlayerStateTable
 	.addr	ContinueWalking
 	.addr	ContinuePushButton
+	.addr	ContinueZapped
 	.addr	ContinueJumping
 	.addr	ContinueFalling
 
@@ -158,15 +160,11 @@ ROUTINE ContinueWalking
 	REP	#$30
 .A16
 
-	LDA	JOY1
-	BIT	#BUTTON_ELEVATOR_DOOR | BUTTON_ELEVATOR_UP | BUTTON_ELEVATOR_DOWN
-	IF_NOT_ZERO
+	LDA	Game__buttonsPressed
+	IF_BIT	#BUTTON_ELEVATOR_DOOR | BUTTON_ELEVATOR_UP | BUTTON_ELEVATOR_DOWN
 		SEP	#$20
 		JMP	SetPushButtonState
-	ENDIF
-
-	BIT	#BUTTON_JUMP
-	IF_NOT_ZERO
+	ELSE_BIT #BUTTON_JUMP
 		SEP	#$20
 		JMP	SetJumpingState
 	ENDIF
@@ -174,11 +172,9 @@ ROUTINE ContinueWalking
 	SEP	#$20
 .A8
 
-	; A is high byte of JOYH
-	; only testing left/right, thus fixed
-	XBA
-	BIT	#JOYH_LEFT
-	IF_NOT_ZERO
+	; only testing left/right, thus high byte
+	LDA	JOY1H
+	IF_BIT	#JOYH_LEFT
 		; left pressed
 		LDA	facingRightOnZero
 		IF_ZERO
@@ -212,12 +208,7 @@ ROUTINE ContinueWalking
 			STA	counter
 		ENDIF
 
-		RTS
-	ENDIF
-
-
-	BIT	#JOYH_RIGHT
-	IF_NOT_ZERO
+	ELSE_BIT #JOYH_RIGHT
 		; right pressed
 		LDA	facingRightOnZero
 		IF_NOT_ZERO
@@ -250,20 +241,19 @@ ROUTINE ContinueWalking
 			STA	counter
 		ENDIF
 
-		RTS
-	ENDIF
-
-	; Standing Still
-	LDA	facingRightOnZero
-	IF_NOT_ZERO
-		LDX	#.loword(MetaSprite_player_standLeft)
 	ELSE
-		LDX	#.loword(MetaSprite_player_standRight)
-	ENDIF
-	STX	metaSpriteFrame
+		; Standing Still
+		LDA	facingRightOnZero
+		IF_NOT_ZERO
+			LDX	#.loword(MetaSprite_player_standLeft)
+		ELSE
+			LDX	#.loword(MetaSprite_player_standRight)
+		ENDIF
+		STX	metaSpriteFrame
 
-	LDY	#0
-	STY	xVelocity
+		LDY	#0
+		STY	xVelocity
+	ENDIF
 
 	RTS
 
@@ -272,13 +262,112 @@ ROUTINE ContinueWalking
 .A8
 .I16
 ROUTINE SetPushButtonState
-	; state = PLAYER_FALLING
-	; xVelocity = 0
-	; counter = PLAYER_BUTTON_ANIMATION_DELAY
-	; metaSpriteFrame = facingRightOnZero ? jumpLeft : jumpRight
+	; if not standing
+	;	return
 	;
-	; processPushButton()
-	
+	; if xPos < SWITCH_LEFT_LIMIT && facingRightOnZero != 0
+	;	side = left 	// c clear
+	; elseif xPos >= SWITCH_RIGHT_LIMIT && facingRightOnZero = 0
+	;	side = right 	// c set
+	; else
+	;	return
+	;
+	; if joy1 & BUTTON_ELEVATOR_DOOR
+	;	floor = yPos / 64  ; HACK
+	;	c = Elevators__PlayerPressDoor(side, floor)
+	; elseif joy2 & BUTTON_ELEVATOR_DOOR
+	;	c = Elevators__PlayerPressUp(side)
+	; elseif joy3 & BUTTON_ELEVATOR_DOOR
+	;	c = Elevators__PlayerPressDown(side)
+	; else
+	;	return
+	;
+	; if c clear
+	;	SetPlayerZapped
+	; else
+	;	player.state = PUSH_BUTTON
+	;	player.xVelocity = 0
+	;	player.counter = PLAYER_BUTTON_ANIMATION_DELAY
+	;	metaSpriteFrame = facingRightOnZero ? pushButtonLeft : pushButtonRight
+
+	LDA	standingIfZero
+	IF_NOT_ZERO
+		RTS
+	ENDIF
+
+	; This bit of code will return if not in front of a switch
+	; and set or clear carry depending on the elevator's side
+	LDA	xPos + 1
+	CMP	#SWITCH_LEFT_LIMIT
+	IF_LT
+		LDA	facingRightOnZero
+		BNE	SetPushButtonState_InFrontOfSwitch
+		RTS
+	ENDIF
+	CMP	#SWITCH_RIGHT_LIMIT
+	IF_GT
+		LDA	facingRightOnZero
+		BEQ	SetPushButtonState_InFrontOfSwitch
+	ENDIF
+
+	RTS
+
+SetPushButtonState_InFrontOfSwitch:
+
+
+	; NOTICE: The following code MUST not modify carry
+	; carry contains the which elevator is used.
+	; luckally BIT doesn't set carry
+	REP	#$30
+.A16
+
+	LDA	JOY1
+	IF_BIT	#BUTTON_ELEVATOR_DOOR
+		SEP	#$20
+.A8
+		PHP
+
+		;; ::HACK - works because the rafters must be stood upon::
+		.assert RAFTER_SPACING <= 8, error, "Hack will not work"
+		.assert TOP_RAFTER < 63, error, "Hack will not work"
+
+		LDA	yPos + 1
+		LSR
+		LSR
+		LSR
+		LSR
+		LSR
+		LSR		; / 64
+
+		PLP
+
+		JSR	Elevators__PlayerPressDoor
+
+.A16
+	ELSE_BIT #BUTTON_ELEVATOR_UP
+		SEP	#$20
+.A8
+		JSR	Elevators__PlayerPressUp
+
+.A16
+	ELSE_BIT #BUTTON_ELEVATOR_DOWN
+		SEP	#$20
+.A8
+		JSR	Elevators__PlayerPressDown
+
+.A16
+	ELSE
+		SEP	#$20
+.A8
+		RTS
+	ENDIF
+
+
+	; Check if successful
+	BCC	SetPlayerZapped
+
+	; Push successful
+
 	LDX	#PLAYER_PUSH_BUTTON
 	STX	state
 
@@ -294,12 +383,10 @@ ROUTINE SetPushButtonState
 	ELSE
 		LDX	#.loword(MetaSprite_player_pushButtonRight)
 	ENDIF
-
 	STX	metaSpriteFrame
 
-	;; Process Push Button	
+	RTS
 
-	.assert * = ContinuePushButton, lderror, "Bad Flow"
 
 .A8
 .I16
@@ -313,6 +400,52 @@ ROUTINE	ContinuePushButton
 	RTS
 
 
+.A8
+.I16
+ROUTINE SetPlayerZapped
+	;	player.state = ZAPPED
+	;	player.xVelocity = 0
+	;	player.counter = PLAYER_ZAPPED_ANIMATION_DELAY
+	;	metaSpriteFrame = facingRightOnZero ? zappedLeft : zappedRight
+	;
+	;	play(SOUND_ZAPPED)
+
+	LDX	#PLAYER_ZAPPED
+	STX	state
+
+	LDY	#0
+	STY	xVelocity
+
+	LDA	#PLAYER_ZAPPED_ANIMATION_DELAY
+	STA	counter
+	
+
+	LDA	facingRightOnZero
+	IF_NOT_ZERO
+		LDX	#.loword(MetaSprite_player_zappedLeft)
+	ELSE
+		LDX	#.loword(MetaSprite_player_zappedRight)
+	ENDIF
+	STX	metaSpriteFrame
+
+	; ::SOUND player zapped::
+
+	RTS
+
+
+.A8
+.I16
+ROUTINE	ContinueZapped
+	; if --counter == 0
+	;	goto SetWalkingState
+
+	DEC	counter
+	JEQ	SetWalkingState
+
+	; ::TODO draw Zapped sprite::
+
+	RTS
+
 
 .A8
 .I16
@@ -324,7 +457,7 @@ ROUTINE SetJumpingState
 	; standingIfZero = true
 	; metaSpriteFrame = facingRightOnZero ? jumpLeft : jumpRight
 	;
-	; play jumping sound
+	; play(SOUND_JUMPING)
 
 	LDX	#PLAYER_JUMPING
 	STX	state
@@ -456,7 +589,7 @@ ROUTINE SetFallingState
 .I16
 ROUTINE ContinueFalling
 	; if standing
-	;	play landing sound
+	;	play(SOUND_LANDING)
 	;	goto SetWalkingState
 	; else
 	;	yVelocity += GRAVITY_PER_FRAME
