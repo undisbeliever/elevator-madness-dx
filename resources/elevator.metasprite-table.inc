@@ -20,3 +20,25 @@ MetaSprite_player:
 	.addr MetaSprite_player_pushButtonLeft
 	.addr MetaSprite_player_zappedLeft
 
+MetaSpriteFrameTable_npcs:
+MetaSprite_businessMan:
+	; FrameSet npc
+	.addr MetaSprite_businessMan_normalStandRight
+	.addr MetaSprite_businessMan_normalWalkRight
+	.addr MetaSprite_businessMan_normalWaitRight
+	.addr MetaSprite_businessMan_stressedStandRight
+	.addr MetaSprite_businessMan_stressedWalkRight
+	.addr MetaSprite_businessMan_stressedWaitRight
+	.addr MetaSprite_businessMan_angryStandRight
+	.addr MetaSprite_businessMan_angryWalkRight
+	.addr MetaSprite_businessMan_angryWaitRight
+	.addr MetaSprite_businessMan_normalStandLeft
+	.addr MetaSprite_businessMan_normalWalkLeft
+	.addr MetaSprite_businessMan_normalWaitLeft
+	.addr MetaSprite_businessMan_stressedStandLeft
+	.addr MetaSprite_businessMan_stressedWalkLeft
+	.addr MetaSprite_businessMan_stressedWaitLeft
+	.addr MetaSprite_businessMan_angryStandLeft
+	.addr MetaSprite_businessMan_angryWalkLeft
+	.addr MetaSprite_businessMan_angryWaitLeft
+

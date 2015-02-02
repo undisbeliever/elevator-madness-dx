@@ -4,6 +4,7 @@
 .include "game.h"
 .include "player.h"
 .include "elevators.h"
+.include "npcs.h"
 .include "includes/sfc_header.inc"
 
 .include "routines/screen.h"
@@ -73,6 +74,7 @@ ROUTINE PlayGame
 
 	JSR	Player__Init
 	JSR	Elevators__Init
+	JSR	Npcs__Init
 
 	.assert * = GameLoop, lderror, "Bad flow"
 
@@ -80,6 +82,8 @@ ROUTINE PlayGame
 .I16
 ROUTINE GameLoop
 	REPEAT
+		WAI
+
 		LDA	strikes
 		CMP	#N_STRIKES
 	WHILE_NE
@@ -89,14 +93,13 @@ ROUTINE GameLoop
 
 		JSR	Player__Process
 		JSR	Elevators__Process
+		JSR	Npcs__Process
 
 		JSR	MetaSprite__FinalizeLoop
 	
 		JSR	ShowScore
 
 		STZ	updateBgBufferOnZero
-
-		WAI
 	WEND
 
 	RTS
@@ -149,7 +152,7 @@ ROUTINE SetupScreen
 	LDA	#INIDISP_FORCE
 	STA	INIDISP
 
-	LDA	#BGMODE_MODE1_BG3_PRIORITY
+	LDA	#BGMODE_MODE2
 	STA	BGMODE
 
 	LDX	#0
@@ -157,10 +160,6 @@ ROUTINE SetupScreen
 	STX	BG1HOFS
 	STX	BG2HOFS
 	STX	BG2HOFS
-	STX	BG3HOFS
-	STX	BG3HOFS
-	STX	BG4HOFS
-	STX	BG4HOFS
 
 	Screen_SetVramBaseAndSize GAME
 
@@ -171,6 +170,9 @@ ROUTINE SetupScreen
 	TransferToCgramLocation	interactivePalette, 7 * 16
 	TransferToVramLocation	playerTiles, GAME_OAM_TILES
 	TransferToCgramLocation playerPalette, 8 * 16, 32
+
+	TransferToVramLocation businessManTiles, GAME_OAM_TILES + (512 - 32) * 16
+	TransferToCgramLocation businessManPalette, 128 + 7 * 16
 
 	LDA	#TM_BG1 | TM_BG2 | TM_BG3 | TM_OBJ
 	STA	TM

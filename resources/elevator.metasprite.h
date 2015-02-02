@@ -16,6 +16,25 @@
 	MetaSpriteFrame_player_fallLeft = 11
 	MetaSpriteFrame_player_pushButtonLeft = 12
 	MetaSpriteFrame_player_zappedLeft = 13
+	; MetaSpriteFrame_npc
+	MetaSpriteFrame_npc_normalStandRight = 0
+	MetaSpriteFrame_npc_normalWalkRight = 1
+	MetaSpriteFrame_npc_normalWaitRight = 2
+	MetaSpriteFrame_npc_stressedStandRight = 3
+	MetaSpriteFrame_npc_stressedWalkRight = 4
+	MetaSpriteFrame_npc_stressedWaitRight = 5
+	MetaSpriteFrame_npc_angryStandRight = 6
+	MetaSpriteFrame_npc_angryWalkRight = 7
+	MetaSpriteFrame_npc_angryWaitRight = 8
+	MetaSpriteFrame_npc_normalStandLeft = 9
+	MetaSpriteFrame_npc_normalWalkLeft = 10
+	MetaSpriteFrame_npc_normalWaitLeft = 11
+	MetaSpriteFrame_npc_stressedStandLeft = 12
+	MetaSpriteFrame_npc_stressedWalkLeft = 13
+	MetaSpriteFrame_npc_stressedWaitLeft = 14
+	MetaSpriteFrame_npc_angryStandLeft = 15
+	MetaSpriteFrame_npc_angryWalkLeft = 16
+	MetaSpriteFrame_npc_angryWaitLeft = 17
 
 
 .global MetaSpriteFrameTable
@@ -36,4 +55,25 @@
 	.global MetaSprite_player_fallLeft
 	.global MetaSprite_player_pushButtonLeft
 	.global MetaSprite_player_zappedLeft
+
+.global MetaSpriteFrameTable_npcs
+.global MetaSprite_businessMan
+	.global MetaSprite_businessMan_normalStandRight
+	.global MetaSprite_businessMan_normalWalkRight
+	.global MetaSprite_businessMan_normalWaitRight
+	.global MetaSprite_businessMan_stressedStandRight
+	.global MetaSprite_businessMan_stressedWalkRight
+	.global MetaSprite_businessMan_stressedWaitRight
+	.global MetaSprite_businessMan_angryStandRight
+	.global MetaSprite_businessMan_angryWalkRight
+	.global MetaSprite_businessMan_angryWaitRight
+	.global MetaSprite_businessMan_normalStandLeft
+	.global MetaSprite_businessMan_normalWalkLeft
+	.global MetaSprite_businessMan_normalWaitLeft
+	.global MetaSprite_businessMan_stressedStandLeft
+	.global MetaSprite_businessMan_stressedWalkLeft
+	.global MetaSprite_businessMan_stressedWaitLeft
+	.global MetaSprite_businessMan_angryStandLeft
+	.global MetaSprite_businessMan_angryWalkLeft
+	.global MetaSprite_businessMan_angryWaitLeft
 

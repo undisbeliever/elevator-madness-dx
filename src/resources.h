@@ -3,7 +3,7 @@
 
 .include "includes/import_export.inc"
 
-; Autogen by snesdev-util
+; Include Autogen by snesdev-util
 .include "resources/elevator.metasprite.h"
 
 ;; Resources
@@ -14,6 +14,8 @@ IMPORT_BINARY interactiveTiles
 IMPORT_BINARY interactivePalette
 IMPORT_BINARY playerTiles
 IMPORT_BINARY playerPalette
+IMPORT_BINARY businessManTiles
+IMPORT_BINARY businessManPalette
 
 .endif ; ::_RESOURCES_H_
 

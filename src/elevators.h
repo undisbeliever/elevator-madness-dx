@@ -17,15 +17,13 @@
 	ELEVATOR_MOVING_UP	=  8
 	ELEVATOR_MOVING_DOWN	= 10
 	ELEVATOR_CRASHED	= 12
-	NPC_LEAVING		= 14
-	NPC_ENTERING		= 16
+	ELEVATOR_NPC_ENTERING	= 14
+	ELEVATOR_NPC_LEAVING	= 16
 .endenum
 
 
-.define N_FLOORS 4
-
 N_DOOR_FRAMES = 16
-N_ELEVATOR_MOVING_FRAMES = 90
+N_ELEVATOR_MOVING_FRAMES = 60
 
 DOOR_CLOSED_FRAME = 0
 DOOR_OPEN_FRAME = N_DOOR_FRAMES - 1
@@ -48,12 +46,6 @@ ELEVATOR_LIGHT_RIGHT_TILE	= 11 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
 
 ELEVATOR_SWITCH_OFF_TILE	= 12 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
 ELEVATOR_SWITCH_ON_TILE		= 13 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
-
-ELEVATOR_LEFT_UP_ARROW_TILE	= 26 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
-ELEVATOR_LEFT_DOWN_ARROW_TILE	= 27 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
-ELEVATOR_RIGHT_UP_ARROW_TILE	= 28 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
-ELEVATOR_RIGHT_DOWN_ARROW_TILE	= 29 | 7 << TILEMAP_PALETTE_SHIFT | TILEMAP_ORDER_FLAG
-
 
 ELEVATOR_FLOOR_0_COLUMN		= 2
 ELEVATOR_FLOOR_COLUMN_SPACING	= 6
@@ -116,9 +108,32 @@ IMPORT_MODULE Elevators
 	;; 
 	;; REQUIRE: 8 bit A, 16 bit Index
 	;; INPUT:
-	;;	C: elevator (clear = left, set = right)
+	;;	c: elevator (clear = left, set = right)
 	;; OUTPUT: C set if elevator is now moving, otherwise false
 	ROUTINE PlayerPressDown
+
+	;; Checks if the NPC can enter the elevator.
+	;;
+	;; If so then:
+	;;	* The elevator's state is changed to NPC_LEAVING
+	;;	* The elevator's occupant is set to DP.
+	;;
+	;; REQUIRE: 8 bit A, 16 bit Index
+	;; INPUT:
+	;;	DP: The NPC
+	;;	 A: NPC floor
+	;;	 c: elevator (clear = left, set = right)
+	;; RETURN: carry set if NPC is entering elevator.
+	ROUTINE	NpcEnterElevator
+
+	;; Notifies the elevator that the NPC is inside.
+	;;
+	;; REQUIRE: 8 bit A, 16 bit Index
+	;; INPUT:
+	;;	DP: The NPC
+	;;	 c: elevator (clear = left, set = right)
+	ROUTINE	NpcInsideElevator
+
 
 ENDMODULE
 

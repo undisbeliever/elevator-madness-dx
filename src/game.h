@@ -16,6 +16,8 @@
 
 .include "resources.h"
 
+.define N_FLOORS 4
+
 .if .xmatch(REGION, NTSC)
 	FPS = 60
 .else
@@ -30,7 +32,6 @@ GAME_BG2_MAP	= $0400
 GAME_BG3_MAP	= $0800
 GAME_BG1_TILES	= $5000
 GAME_BG2_TILES	= $1000
-GAME_BG3_TILES	= $4000
 GAME_OAM_TILES	= $6000
 
 GAME_BG1_SIZE	= BGXSC_SIZE_32X32

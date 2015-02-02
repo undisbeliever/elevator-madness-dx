@@ -4,6 +4,7 @@
 
 .include "game.h"
 .include "elevators.h"
+.include "npcs.h"
 
 MODULE Elevators
 
@@ -24,6 +25,9 @@ MODULE Elevators
 
 	;; Frame counter for animations/states
 	counter		.byte
+
+	;; The NPC that is currently in the elevator
+	occupant	.addr
 .endstruct
 
 
@@ -31,15 +35,12 @@ MODULE Elevators
 	doorsPos		.res N_FLOORS * 2
 	lightsPos		.res N_FLOORS * 2
 	switchesPos		.res N_FLOORS * 2
-	arrowsPos		.res 4 * N_FLOORS * 2 ; Arrows[floor][count]
 
 	ropePos			.addr
 	ropeTileOffset		.word
 
 	switchOnTile		.word
 	switchOffTile		.word
-	upArrowTile		.word
-	downArrowTile		.word	
 .endstruct
 
 
@@ -52,7 +53,7 @@ MODULE Elevators
 
 
 .rodata
-LABEL ElevatorStructTable
+LABEL ElevatorStateTable
 	.addr ContinueDoorClosed
 	.addr ContinueDoorOpening
 	.addr ContinueDoorOpen
@@ -60,7 +61,8 @@ LABEL ElevatorStructTable
 	.addr ContinueMovingUp
 	.addr ContinueMovingDown
 	.addr ContinueCrashed
-
+	.addr ContinueNpcEntering
+	.addr ContinueNpcLeaving
 
 .code
 
@@ -70,38 +72,38 @@ ROUTINE Init
 	PHD
 
 	; Setup left Elevator
-	LDX	#ELEVATOR_DOOR_CLOSED
-	STX	leftElevator + ElevatorStruct::state
-
-	LDX	#.loword(LeftElevatorTilePositionTable)
-	STX	leftElevator + ElevatorStruct::tileTable
-
-	LDY	#0
-	STY	leftElevator + ElevatorStruct::floor
-
-
-	; Setup Right Elevator
-	LDX	#ELEVATOR_DOOR_CLOSED
-	STX	rightElevator + ElevatorStruct::state
-
-	LDX	#.loword(RightElevatorTilePositionTable)
-	STX	rightElevator + ElevatorStruct::tileTable
-
-	LDY	#0
-	STY	rightElevator + ElevatorStruct::floor
-
-
 	LDA	#.hibyte(leftElevator)
 	XBA
 	LDA	#.lobyte(leftElevator)
 	TCD
 
+	LDX	#ELEVATOR_DOOR_CLOSED
+	STX	ElevatorStruct::state
+
+	LDX	#.loword(LeftElevatorTilePositionTable)
+	STX	ElevatorStruct::tileTable
+
+	LDY	#0
+	STY	ElevatorStruct::floor
+	STY	ElevatorStruct::occupant
+
 	JSR	_Init_Draw
 
+	; Setup Right Elevator
 	LDA	#.hibyte(rightElevator)
 	XBA
 	LDA	#.lobyte(rightElevator)
 	TCD
+
+	LDX	#ELEVATOR_DOOR_CLOSED
+	STX	ElevatorStruct::state
+
+	LDX	#.loword(RightElevatorTilePositionTable)
+	STX	ElevatorStruct::tileTable
+
+	LDY	#0
+	STY	ElevatorStruct::floor
+	STY	ElevatorStruct::occupant
 
 	JSR	_Init_Draw
 
@@ -144,6 +146,9 @@ ROUTINE _Init_Draw
 .A8
 .I16
 ROUTINE Process
+	; stateTable[leftElevator.state](leftElevator)
+	; stateTable[rightElevator.state](rightElevator)
+
 	PHD
 
 	LDA	#.hibyte(leftElevator)
@@ -153,7 +158,7 @@ ROUTINE Process
 	TCD
 
 	LDX	ElevatorStruct::state
-	JSR	(.loword(ElevatorStructTable), X)
+	JSR	(.loword(ElevatorStateTable), X)
 
 
 	LDA	#.hibyte(rightElevator)
@@ -162,7 +167,7 @@ ROUTINE Process
 	TCD
 
 	LDX	ElevatorStruct::state
-	JSR	(.loword(ElevatorStructTable), X)
+	JSR	(.loword(ElevatorStateTable), X)
 
 	PLD
 	RTS
@@ -282,7 +287,7 @@ ROUTINE PlayerPressUp
 .A8
 .I16
 ROUTINE PlayerPressDown
-	; if c set
+	; if c clear
 	;	elevator = leftElevator
 	; else
 	;	elevator = rightElevator
@@ -319,6 +324,74 @@ ROUTINE PlayerPressDown
 	RTS
 
 
+; DP: The NPC
+;  A: NPC floor
+;  C: elevator (clear = left, set = right)
+;
+; Return C set if NPC is now entering elevator
+.A8
+.I16
+ROUTINE	NpcEnterElevator
+	; if c clear
+	;	x = leftElevator
+	; else
+	;	x = rightElevator
+	;
+	; if x->occupannt == 0 and x->state = ELEVATOR_DOOR_OPEN && elevator->floor = floor
+	;	x->occupant = DP
+	;	x->state = ELECATOR_NPC_ENTERING
+	;	return true
+	;
+	; return false
+
+	IF_C_CLEAR
+		LDX	#leftElevator
+	ELSE
+		LDX	#rightElevator
+	ENDIF
+
+	LDY	a:ElevatorStruct::occupant, X
+	IF_ZERO
+		LDY	a:ElevatorStruct::state, X
+		CPY	#ELEVATOR_DOOR_OPEN
+		IF_EQ
+			CMP a:ElevatorStruct::floor, X
+			IF_EQ
+				REP	#$30
+.A16
+				TDC
+				STA	a:ElevatorStruct::occupant, X
+
+				LDA	#ELEVATOR_NPC_ENTERING
+				STA	a:ElevatorStruct::state, X
+
+				SEP	#$21 ; Also sets carry
+.A8
+				RTS
+			ENDIF
+		ENDIF
+	ENDIF
+
+	CLC
+	RTS
+
+
+; DP: The NPC
+;  C: elevator (clear = left, set = right)
+.A8
+.I16
+ROUTINE	NpcInsideElevator
+	IF_C_CLEAR
+		LDX	#leftElevator
+	ELSE
+		LDX	#rightElevator
+	ENDIF
+
+	LDA	#ELEVATOR_DOOR_OPEN
+	STA	a:ElevatorStruct::state, X
+
+	RTS
+
 
 ; DP = selected elevator
 .A8
@@ -354,6 +427,9 @@ ROUTINE SetDoorOpening
 	; elevator.counter = 0
 	; play(DOOR_OPENING_SOUND)
 	; elevator.DrawSwitchOn()
+	;
+	; if elevator.occupant != 0
+	;	Npc__OccupiedElevatorDoorOpening(elevator.occupant, elevator.floor)
 
 	LDY	#ELEVATOR_DOOR_OPENING
 	STY	ElevatorStruct::state
@@ -361,6 +437,12 @@ ROUTINE SetDoorOpening
 	STZ	ElevatorStruct::counter
 
 	;; ::SOUND door opening::
+
+	LDX	ElevatorStruct::occupant
+	IF_NOT_ZERO
+		LDA	ElevatorStruct::floor
+		JSR	Npcs__OccupiedElevatorDoorOpening
+	ENDIF
 
 	JMP	DrawSwitchOn
 
@@ -394,6 +476,10 @@ ROUTINE SetDoorOpen
 	; state = ELEVATOR_DOOR_OPEN 
 	; elevator.drawDoor(DOOR_OPEN_FRAME)
 	; play(DOOR_OPEN_SOUND)
+	;
+	; if elevator.occupant != 0
+	;	Npc__OccupiedElevatorOpen(elevator.occupant, elevator.floor)
+	;	elevator.occupant = 0
 
 	LDX	#ELEVATOR_DOOR_OPEN
 	STX	ElevatorStruct::state
@@ -402,6 +488,14 @@ ROUTINE SetDoorOpen
 	JSR	DrawDoor
 
 	;; ::SOUND door open::
+
+	LDX	ElevatorStruct::occupant
+	IF_NOT_ZERO
+		LDA	ElevatorStruct::floor
+		JSR	Npcs__OccupiedElevatorOpen
+		LDX	#0
+		STX	ElevatorStruct::occupant
+	ENDIF
 
 	.assert * = ContinueDoorOpen, lderror, "Bad Flow"
 
@@ -592,6 +686,14 @@ ROUTINE ContinueCrashed
 	; ::TODO animation to show crash::
 	STP
 
+	RTS
+
+
+; DP = selected elevator
+.A8
+.I16
+ROUTINE ContinueNpcEntering
+ROUTINE ContinueNpcLeaving
 	RTS
 
 
@@ -824,12 +926,6 @@ LABEL LeftElevatorTilePositionTable
 	.repeat N_FLOORS, i
 		.addr (ELEVATOR_FLOOR_0_COLUMN + ELEVATOR_FLOOR_COLUMN_SPACING * i + ELEVATOR_SWITCH_COLUMN) * 64 + ELEVATOR_LEFT_SWITCH_ROW * 2
 	.endrepeat
-	; Arrows
-	.repeat N_FLOORS, i
-		.repeat 4, j
-			.addr (ELEVATOR_FLOOR_0_COLUMN + ELEVATOR_FLOOR_COLUMN_SPACING * i + ELEVATOR_ARROW_COLUMN) * 64 + (ELEVATOR_LEFT_ARROW_ROW - j) * 2
-		.endrepeat
-	.endrepeat
 	; Rope Position
 	.addr ELEVATOR_LEFT_ROPE_ROW * 2
 	; Rope Offset
@@ -837,8 +933,6 @@ LABEL LeftElevatorTilePositionTable
 	; Tiles
 	.word ELEVATOR_SWITCH_ON_TILE
 	.word ELEVATOR_SWITCH_OFF_TILE
-	.word ELEVATOR_LEFT_UP_ARROW_TILE
-	.word ELEVATOR_LEFT_DOWN_ARROW_TILE
 
 
 
@@ -855,12 +949,6 @@ LABEL RightElevatorTilePositionTable
 	.repeat N_FLOORS, i
 		.addr (ELEVATOR_FLOOR_0_COLUMN + ELEVATOR_FLOOR_COLUMN_SPACING * i + ELEVATOR_SWITCH_COLUMN) * 64 + ELEVATOR_RIGHT_SWITCH_ROW * 2
 	.endrepeat
-	; Arrows
-	.repeat N_FLOORS, i
-		.repeat 4, j
-			.addr (ELEVATOR_FLOOR_0_COLUMN + ELEVATOR_FLOOR_COLUMN_SPACING * i + ELEVATOR_ARROW_COLUMN) * 64 + (ELEVATOR_RIGHT_ARROW_ROW + j) * 2
-		.endrepeat
-	.endrepeat
 	; Rope Position
 	.addr ELEVATOR_RIGHT_ROPE_ROW * 2
 	; Rope Offset
@@ -868,8 +956,6 @@ LABEL RightElevatorTilePositionTable
 	; Tiles
 	.word ELEVATOR_SWITCH_ON_TILE | TILEMAP_H_FLIP_FLAG
 	.word ELEVATOR_SWITCH_OFF_TILE | TILEMAP_H_FLIP_FLAG
-	.word ELEVATOR_RIGHT_UP_ARROW_TILE
-	.word ELEVATOR_RIGHT_DOWN_ARROW_TILE
 
 
 LABEL DoorTiles
