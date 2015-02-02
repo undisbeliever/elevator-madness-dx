@@ -5,6 +5,7 @@
 .include "game.h"
 .include "npcs.h"
 .include "elevators.h"
+.include "random.h"
 .include "routines/math.h"
 .include "routines/metasprite.h"
 
@@ -103,7 +104,6 @@ ROUTINE Init
 	LDX	#NPC_FEELINGS_SPEED
 	STX	feelingsSpeed
 
-	; ::TODO random delay::
 	LDX	#1
 	STX	countdownToNextNpc
 
@@ -186,9 +186,11 @@ ROUTINE Process
 		; subtraction overflow
 		JSR	Spawn
 
-		; ::TODO random ::
-		LDX	#60*10
-		STX	countdownToNextNpc
+		LDX	#MIN_SPAWN_COUNTDOWN
+		LDY	#MAX_SPAWN_COUNTDOWN
+		JSR	Random__Rnd_U16X_U16Y
+
+		STY	countdownToNextNpc
 	ENDIF
 
 	PLD
@@ -204,6 +206,7 @@ ROUTINE OccupiedElevatorDoorOpening
 	; x->state = NPC_WAIT_DOOR_OPEN
 
 	PHX
+	TAY
 	LDX	#ELEVATOR_FLOOR_COLUMN_SPACING * 8
 	JSR	Math__Multiply_U8Y_U8X_UY
 	TYA
@@ -212,7 +215,7 @@ ROUTINE OccupiedElevatorDoorOpening
 	STA	a:NpcStruct::yPos + 1, X
 
 	LDA	#NPC_WAIT_DOOR_OPEN
-	STA	a:NpcStruct::state
+	STA	a:NpcStruct::state, X
 
 	RTS
 
@@ -265,10 +268,10 @@ ROUTINE Spawn
 	; nextFreeNpcPtr = 0
 	;
 	;
-	; npc.floor = ::TODO random 0 - 3::
-	; ::TODO target floor::
+	; npc.floor = Random_Rnd(4)
+	; npc.targetFloor = (npc.floor + Random_Rnd(3) + 1) AND 3
 	;
-	; npc.leftSideOnZero = ::TODO random 0 - 1::
+	; npc.leftSideOnZero = Random_Rnd(2)
 	; npc.facingLeftOnZero = npc.leftSideOnZero
 	; if leftSideOnZero == 0
 	;	npc.xPos = NPC_LEFT_XSTART
@@ -278,7 +281,8 @@ ROUTINE Spawn
 	; npc.animationCounter = NPC_MOVE_FRAME_DELAY
 	; npc.frame = 0
 	; npc.feelings = 0
-	; npc.feelingsTimeout = random(NPC_FEELINGS_MIN_TIMEOUT, NPC_FEELINGS_MAX_TIMEOUT)
+	; npc.feelingsTimeout = NPC_FEELINGS_TIMEOUT
+	;
 	; ::TODO more than 1 sprite::
 	; npc.spriteCharAttr = businessManCharAttr
 	; npc.spriteTablePtr = MetaSprite_businessMan
@@ -316,16 +320,21 @@ ROUTINE Spawn
 	SEP	#$20
 .A8
 
-	; ::TODO random floor::
-	LDA	#3
+	.assert N_FLOORS = 4, error, "Bad value"
+
+	JSR	Random__Rnd_4
 	STA	NpcStruct::floor
 
-	; ::TODO random target
-	LDA	#2
+	JSR	Random__Rnd_3
+	SEC
+	ADC	NpcStruct::floor
+	AND	#$03
 	STA	NpcStruct::targetFloor
 
-	; ::TODO random side::
-	LDA	#$FF
+	JSR	Random__Rnd_2
+	IF_NOT_ZERO
+		LDA	#$FF
+	ENDIF
 	STA	NpcStruct::leftSideOnZero
 	STA	NpcStruct::facingLeftOnZero
 
@@ -354,8 +363,7 @@ ROUTINE Spawn
 	STZ	NpcStruct::frame
 	STZ	NpcStruct::feelings
 
-	; ::TODO random delay::
-	LDY	#(NPC_FEELINGS_MIN_TIMEOUT + NPC_FEELINGS_MAX_TIMEOUT) / 2
+	LDY	#NPC_FEELINGS_TIMEOUT
 	STY	NpcStruct::feelingsTimeout
 
 	; ::TODO random NPC sprite::
@@ -590,11 +598,11 @@ ContinueWalkToElevator_SkipRightLineCheck:
 .I16
 ROUTINE WaitingInLine
 	; // waiting
-	; if npc.feelings != NPC_FEELING_ANRGY
+	; if npc.feelings != NPC_FEELING_ANGRY
 	;	npc.feelingsTimeout -= feelingsSpeed
 	; 	if npc.feelingsTimeout < 0
 	;		npc.feelings++
-	;		npc.feelingTimeout = NPC_FEELINGS_MAX_TIMEOUT
+	;		npc.feelingTimeout = NPC_FEELINGS_TIMEOUT
 	;		CalculateSpriteFramePtr()
 	; else
 	;	if npc.nextNpcInLine
@@ -617,8 +625,7 @@ ROUTINE WaitingInLine
 			; subtraction underflow
 			INC	NpcStruct::feelings
 
-			; ::TODO random delay::
-			LDY	#NPC_FEELINGS_MAX_TIMEOUT
+			LDY	#NPC_FEELINGS_TIMEOUT
 			STY	NpcStruct::feelingsTimeout
 
 			JMP	CalculateSpriteFramePtr

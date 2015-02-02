@@ -2,9 +2,10 @@
 
 
 .include "game.h"
+.include "npcs.h"
+.include "random.h"
 .include "player.h"
 .include "elevators.h"
-.include "npcs.h"
 .include "includes/sfc_header.inc"
 
 .include "routines/screen.h"
@@ -87,6 +88,8 @@ ROUTINE GameLoop
 		LDA	strikes
 		CMP	#N_STRIKES
 	WHILE_NE
+		JSR	Random__AddJoypadEntropy
+
 		JSR	HandleButtons
 
 		JSR	MetaSprite__InitLoop
