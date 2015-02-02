@@ -598,7 +598,7 @@ ContinueWalkToElevator_SkipRightLineCheck:
 .I16
 ROUTINE WaitingInLine
 	; // waiting
-	; if npc.feelings != NPC_FEELING_ANGRY
+	; if npc.feelings != NPC_FEELING_FIGHTING
 	;	npc.feelingsTimeout -= feelingsSpeed
 	; 	if npc.feelingsTimeout < 0
 	;		npc.feelings++
@@ -611,7 +611,7 @@ ROUTINE WaitingInLine
 	JSR	ProcessWaitAnimation
 
 	LDA	NpcStruct::feelings
-	CMP	#NPC_FEELINGS_ANGRY
+	CMP	#NPC_FEELINGS_FIGHTING
 	IF_NE
 		REP	#$30
 .A16
@@ -1067,7 +1067,7 @@ ROUTINE ProcessWaitAnimation
 .A8
 .I16
 ROUTINE	CalculateSpriteFramePtr
-	; x = npc.facingLeftOnZero == 0 ? 0 : 9
+	; x = npc.facingLeftOnZero == 0 ? 0 : 12
 	; x = (start + npc.frame + npc.feelings * 3) * 2 + npc.spriteFrameTablePtr
 	; npc.spriteFramePtr = MetaSpriteBank[spriteFrameTablePtr]
 
@@ -1075,7 +1075,7 @@ ROUTINE	CalculateSpriteFramePtr
 	IF_ZERO
 		LDA	#0
 	ELSE
-		LDA	#9
+		LDA	#12
 	ENDIF
 
 	; ::HACK frame and feelings < 4, will not overflow::

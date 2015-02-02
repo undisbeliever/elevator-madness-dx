@@ -27,6 +27,9 @@
 	<framedescription id="angryStandRight" name="Facing right - angry"/>
 	<framedescription id="angryWalkRight" name="Facing right, moving legs - angry"/>
 	<framedescription id="angryWaitRight" name="Facing right, impatient - angry"/>
+	<framedescription id="fightingStandRight" name="Facing right - fighting"/>
+	<framedescription id="fightingWalkRight" name="Facing right, moving legs - fighting"/>
+	<framedescription id="fightingWaitRight" name="Facing right, impatient - fighting"/>
 	<framedescription id="normalStandLeft" name="Facing left"/>
 	<framedescription id="normalWalkLeft" name="Facing left, moving legs"/>
 	<framedescription id="normalWaitLeft" name="Facing left, impatient"/>
@@ -36,6 +39,9 @@
 	<framedescription id="angryStandLeft" name="Facing left - angry"/>
 	<framedescription id="angryWalkLeft" name="Facing left, moving legs - angry"/>
 	<framedescription id="angryWaitLeft" name="Facing left, impatient - angry"/>
+	<framedescription id="fightingStandLeft" name="Facing left - fighting"/>
+	<framedescription id="fightingWalkLeft" name="Facing left, moving legs - fighting"/>
+	<framedescription id="fightingWaitLeft" name="Facing left, impatient - fighting"/>
 </frameset>
 <spritegroup id="elevator">
 	<sprite id="player" frameset="player" tileset="player">
@@ -158,6 +164,21 @@
 			<object xpos="-8" ypos="-8" tile="9" size="small" vflip="vflip" />
 			<object xpos="0" ypos="-8" tile="8" size="small" vflip="vflip" />
 		</frame>
+		<frame implements="fightingStandRight">
+			<object xpos="-8" ypos="-24" tile="4" size="big" vflip="vflip" />
+			<object xpos="-8" ypos="-8" tile="7" size="small" vflip="vflip" />
+			<object xpos="0" ypos="-8" tile="6" size="small" vflip="vflip" />
+		</frame>
+		<frame implements="fightingWalkRight">
+			<object xpos="-8" ypos="-24" tile="4" size="big" vflip="vflip" />
+			<object xpos="-8" ypos="-8" tile="23" size="small" vflip="vflip" />
+			<object xpos="0" ypos="-8" tile="22" size="small" vflip="vflip" />
+		</frame>
+		<frame implements="fightingWaitRight">
+			<object xpos="-8" ypos="-24" tile="4" size="big" vflip="vflip" />
+			<object xpos="-8" ypos="-8" tile="9" size="small" vflip="vflip" />
+			<object xpos="0" ypos="-8" tile="8" size="small" vflip="vflip" />
+		</frame>
 		<frame implements="normalStandLeft">
 			<object xpos="-8" ypos="-24" tile="0" size="big" />
 			<object xpos="-8" ypos="-8" tile="6" size="small" />
@@ -199,6 +220,21 @@
 			<object xpos="0" ypos="-8" tile="23" size="small" />
 		</frame>
 		<frame implements="angryWaitLeft">
+			<object xpos="-8" ypos="-24" tile="4" size="big" />
+			<object xpos="-8" ypos="-8" tile="8" size="small" />
+			<object xpos="0" ypos="-8" tile="9" size="small" />
+		</frame>
+		<frame implements="fightingStandLeft">
+			<object xpos="-8" ypos="-24" tile="4" size="big" />
+			<object xpos="-8" ypos="-8" tile="6" size="small" />
+			<object xpos="0" ypos="-8" tile="7" size="small" />
+		</frame>
+		<frame implements="fightingWalkLeft">
+			<object xpos="-8" ypos="-24" tile="4" size="big" />
+			<object xpos="-8" ypos="-8" tile="22" size="small" />
+			<object xpos="0" ypos="-8" tile="23" size="small" />
+		</frame>
+		<frame implements="fightingWaitLeft">
 			<object xpos="-8" ypos="-24" tile="4" size="big" />
 			<object xpos="-8" ypos="-8" tile="8" size="small" />
 			<object xpos="0" ypos="-8" tile="9" size="small" />

@@ -26,15 +26,21 @@
 	MetaSpriteFrame_npc_angryStandRight = 6
 	MetaSpriteFrame_npc_angryWalkRight = 7
 	MetaSpriteFrame_npc_angryWaitRight = 8
-	MetaSpriteFrame_npc_normalStandLeft = 9
-	MetaSpriteFrame_npc_normalWalkLeft = 10
-	MetaSpriteFrame_npc_normalWaitLeft = 11
-	MetaSpriteFrame_npc_stressedStandLeft = 12
-	MetaSpriteFrame_npc_stressedWalkLeft = 13
-	MetaSpriteFrame_npc_stressedWaitLeft = 14
-	MetaSpriteFrame_npc_angryStandLeft = 15
-	MetaSpriteFrame_npc_angryWalkLeft = 16
-	MetaSpriteFrame_npc_angryWaitLeft = 17
+	MetaSpriteFrame_npc_fightingStandRight = 9
+	MetaSpriteFrame_npc_fightingWalkRight = 10
+	MetaSpriteFrame_npc_fightingWaitRight = 11
+	MetaSpriteFrame_npc_normalStandLeft = 12
+	MetaSpriteFrame_npc_normalWalkLeft = 13
+	MetaSpriteFrame_npc_normalWaitLeft = 14
+	MetaSpriteFrame_npc_stressedStandLeft = 15
+	MetaSpriteFrame_npc_stressedWalkLeft = 16
+	MetaSpriteFrame_npc_stressedWaitLeft = 17
+	MetaSpriteFrame_npc_angryStandLeft = 18
+	MetaSpriteFrame_npc_angryWalkLeft = 19
+	MetaSpriteFrame_npc_angryWaitLeft = 20
+	MetaSpriteFrame_npc_fightingStandLeft = 21
+	MetaSpriteFrame_npc_fightingWalkLeft = 22
+	MetaSpriteFrame_npc_fightingWaitLeft = 23
 
 
 .global MetaSpriteFrameTable
@@ -67,6 +73,9 @@
 	.global MetaSprite_businessMan_angryStandRight
 	.global MetaSprite_businessMan_angryWalkRight
 	.global MetaSprite_businessMan_angryWaitRight
+	.global MetaSprite_businessMan_fightingStandRight
+	.global MetaSprite_businessMan_fightingWalkRight
+	.global MetaSprite_businessMan_fightingWaitRight
 	.global MetaSprite_businessMan_normalStandLeft
 	.global MetaSprite_businessMan_normalWalkLeft
 	.global MetaSprite_businessMan_normalWaitLeft
@@ -76,4 +85,7 @@
 	.global MetaSprite_businessMan_angryStandLeft
 	.global MetaSprite_businessMan_angryWalkLeft
 	.global MetaSprite_businessMan_angryWaitLeft
+	.global MetaSprite_businessMan_fightingStandLeft
+	.global MetaSprite_businessMan_fightingWalkLeft
+	.global MetaSprite_businessMan_fightingWaitLeft
 

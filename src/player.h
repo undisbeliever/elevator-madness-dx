@@ -26,15 +26,15 @@ RAFTER_RIGHT_POS = 140
 RAFTER_CENTER_LEFT = 112
 RAFTER_CENTER_RIGHT = 146
 
-SWITCH_LEFT_LIMIT = PLAYER_LEFT_LIMIT + 8
-SWITCH_RIGHT_LIMIT = PLAYER_RIGHT_LIMIT - 8
+SWITCH_LEFT_LIMIT = PLAYER_LEFT_LIMIT + 10
+SWITCH_RIGHT_LIMIT = PLAYER_RIGHT_LIMIT - 10
 
-PLAYER_WALK_VELOCITY = 191		; Walking speed in 1/256 pixels / frame
-PLAYER_AIR_WALK_VELOCITY = 125		; Velocity while in the air (1/256 pixels/frame).
+PLAYER_WALK_VELOCITY = 225		; Walking speed in 1/256 pixels / frame
+PLAYER_AIR_WALK_VELOCITY = 155		; Velocity while in the air (1/256 pixels/frame).
 
-PLAYER_JUMP_VELOCITY = 445		; Jumping velocity in 1/256 pixels / frame
+PLAYER_JUMP_VELOCITY = 500		; Jumping velocity in 1/256 pixels / frame
 PLAYER_JUMP_HOLD = 20			; Number of frames to hold the jump for
-GRAVITY_PER_FRAME = 31			; Acceleration due to gravity in 1/256 pixels per frame per frame
+GRAVITY_PER_FRAME = 41			; Acceleration due to gravity in 1/256 pixels per frame per frame
 
 PLAYER_WALK_ANIMATION_DELAY = 10	; Number of frames inbetween walking frames.
 PLAYER_TURN_ANIMATION_DELAY = 7		; Number of frames inbetween turning frames.

@@ -32,6 +32,9 @@ MetaSprite_businessMan:
 	.addr MetaSprite_businessMan_angryStandRight
 	.addr MetaSprite_businessMan_angryWalkRight
 	.addr MetaSprite_businessMan_angryWaitRight
+	.addr MetaSprite_businessMan_fightingStandRight
+	.addr MetaSprite_businessMan_fightingWalkRight
+	.addr MetaSprite_businessMan_fightingWaitRight
 	.addr MetaSprite_businessMan_normalStandLeft
 	.addr MetaSprite_businessMan_normalWalkLeft
 	.addr MetaSprite_businessMan_normalWaitLeft
@@ -41,4 +44,7 @@ MetaSprite_businessMan:
 	.addr MetaSprite_businessMan_angryStandLeft
 	.addr MetaSprite_businessMan_angryWalkLeft
 	.addr MetaSprite_businessMan_angryWaitLeft
+	.addr MetaSprite_businessMan_fightingStandLeft
+	.addr MetaSprite_businessMan_fightingWalkLeft
+	.addr MetaSprite_businessMan_fightingWaitLeft
 
