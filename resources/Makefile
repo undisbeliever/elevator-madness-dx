@@ -1,7 +1,8 @@
 
 META = elevator.metasprite.h elevator.metasprite-table.inc elevator.metasprite-data.inc
-MAPS = background.map
-TILES = interactive-tiles.4bpp background.4bpp
+MAPS = background.map controls.map splash.map
+TILES = background.4bpp controls.4bpp splash.4bpp 
+TILES += interactive-tiles.4bpp
 TILES += player.4bpp business-man.4bpp
 PALETTES =  $(patsubst %.2bpp,%.clr,$(patsubst %.4bpp,%.clr,$(SOURCES)))
 

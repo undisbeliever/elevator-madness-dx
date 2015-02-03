@@ -1,13 +1,12 @@
-; Elevator Maddness DX game.
-
+; Elevator Maddness DX game loop.
 
 .include "game.h"
 .include "npcs.h"
 .include "random.h"
 .include "player.h"
 .include "elevators.h"
-.include "includes/sfc_header.inc"
 
+.include "routines/metasprite.h"
 .include "routines/screen.h"
 .include "routines/block.h"
 .include "routines/math.h"
@@ -17,23 +16,6 @@
 	BYTE	updateBgBufferOnZero
 
 .code
-
-;; Initialisation Routine
-ROUTINE Main
-	REP	#$10
-	SEP	#$20
-.A8
-.I16
-
-	; ::TODO Setup Sound Engine::
-	MetaSprite_Init
-
-	JSR	Game__Init
-
-	JSR	Game__PlayGame
-
-	REPEAT
-	FOREVER
 
 
 
@@ -59,9 +41,6 @@ ROUTINE Init
 	MemClear	interactiveBgBuffer, .sizeof(interactiveBgBuffer)
 
 	JSR	SetupScreen
-
-	LDA	#NMITIMEN_VBLANK_FLAG | NMITIMEN_AUTOJOY_FLAG
-	STA	NMITIMEN
 
 	LDA	#$0F
 	STA	INIDISP

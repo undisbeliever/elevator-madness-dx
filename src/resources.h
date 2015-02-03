@@ -10,10 +10,21 @@
 IMPORT_BINARY backgroundMap
 IMPORT_BINARY backgroundTiles
 IMPORT_BINARY backgroundPalette
+
+IMPORT_BINARY splashMap
+IMPORT_BINARY splashTiles
+IMPORT_BINARY splashPalette
+
+IMPORT_BINARY controlsMap
+IMPORT_BINARY controlsTiles
+IMPORT_BINARY controlsPalette
+
 IMPORT_BINARY interactiveTiles
 IMPORT_BINARY interactivePalette
+
 IMPORT_BINARY playerTiles
 IMPORT_BINARY playerPalette
+
 IMPORT_BINARY businessManTiles
 IMPORT_BINARY businessManPalette
 

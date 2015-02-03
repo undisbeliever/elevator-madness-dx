@@ -1,0 +1,198 @@
+; Elevator Maddness DX Splash Screen.
+;
+; Displays the Splash screen,
+;
+; Primary used to prime the Random Number Generator
+
+.include "splash.h"
+.include "random.h"
+
+.include "includes/registers.inc"
+.include "routines/screen.h"
+.include "routines/block.h"
+
+.code
+
+
+MODULE Splash
+
+.segment "SHADOW"
+	BYTE	screenBrightness
+	WORD	timer
+
+
+.code
+
+.A8
+.I16
+ROUTINE SplashScreen
+	; SetupScreen()
+	; Load Tiles and map
+	;
+	; repeat
+	;	force blank
+	;	load splash screen
+	;	a = FadeInOutScreen(SPLASH_TIMEOUT)
+	;
+	;	IF a == 0
+	;		return
+	;
+	;	force blank
+	;	load controls screen
+	;	a = FadeInOutScreen(CONTROLS_TIMEOUT)
+
+	JSR	SetupScreen
+
+	REPEAT
+		LDA	#INIDISP_FORCE
+		STA	INIDISP
+		TransferToVramLocation	splashMap, SPLASH_BG1_MAP
+		TransferToVramLocation	splashTiles, SPLASH_BG1_TILES
+		TransferToCgramLocation	splashPalette, 0
+
+		LDX	#SPLASH_TIMEOUT
+		JSR	FadeInOutScreen
+
+		IF_ZERO
+			RTS
+		ENDIF
+
+
+		LDA	#INIDISP_FORCE
+		STA	INIDISP
+		TransferToVramLocation	controlsMap, SPLASH_BG1_MAP
+		TransferToVramLocation	controlsTiles, SPLASH_BG1_TILES
+		TransferToCgramLocation	controlsPalette, 0
+
+		LDX	#CONTROLS_TIMEOUT
+		JSR	FadeInOutScreen
+	FOREVER
+
+
+; IN: X = frames to timeout
+; OUT: z set if user pressed button, z clear if user doesn't
+.A8
+.I16
+ROUTINE FadeInOutScreen
+	; timer = X
+	;
+	; FadeIn()
+	; repeat
+	;	Random__AddJoypadEntropy()
+	;	Wait one frame
+	;
+	;	timer--
+	;	if timer == 0
+	;		FadeOut()
+	;		return 1
+	;		break
+	;
+	; until JOY1 & JOY_BUTTONS | JOY_START | JOY_SELECT != 0
+	;
+	; FadeOut()
+
+	STX	timer
+
+	JSR	FadeIn
+
+	REPEAT
+		JSR	Random__AddJoypadEntropy
+		WAI
+
+		LDX	timer
+		DEX
+		IF_ZERO
+			JSR	FadeOut
+			LDA	#1
+			RTS
+		ENDIF
+
+		STX	timer
+
+		REP	#$30
+.A16
+		LDA	JOY1
+		AND	#JOY_BUTTONS | JOY_START | JOY_SELECT
+
+		SEP	#$20
+.A8
+	UNTIL_NOT_ZERO
+
+	JSR	FadeOut
+
+	LDA	#0
+	RTS
+
+
+
+; Starts at brightness 0 and Fades in the screen to full brightness
+.A8
+.I16
+ROUTINE FadeIn
+	STZ	screenBrightness
+
+	REPEAT
+		LDA	screenBrightness
+		CMP	#16
+	WHILE_LT
+		STA	INIDISP
+		INC	screenBrightness
+
+		JSR	Random__AddJoypadEntropy
+		WAI
+	WEND
+
+	RTS
+
+
+
+; Fades Out the screen then goes Blank
+.A8
+.I16
+ROUTINE FadeOut
+	LDA	#15 + 1
+	STA	screenBrightness
+
+	REPEAT
+		LDA	screenBrightness
+	WHILE_NOT_ZERO
+		DEC
+		STA	INIDISP
+		STA	screenBrightness
+
+		JSR	Random__AddJoypadEntropy
+		WAI
+	WEND
+
+	LDA	#INIDISP_FORCE
+	STA	INIDISP
+
+	RTS
+
+
+
+; Sets up the game screen
+.A8
+.I16
+ROUTINE SetupScreen
+	LDA	#INIDISP_FORCE
+	STA	INIDISP
+
+	LDA	#BGMODE_MODE2
+	STA	BGMODE
+
+	LDX	#0
+	STX	BG1HOFS
+	STX	BG1HOFS
+	STX	BG2HOFS
+	STX	BG2HOFS
+
+	Screen_SetVramBaseAndSize SPLASH
+
+	LDA	#TM_BG1
+	STA	TM
+
+	RTS
+
+ENDMODULE
+

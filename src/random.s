@@ -36,9 +36,8 @@ ROUTINE Rnd
 	LDY	#Random__MTH_A
 	JSR	Math__Multiply_U32_U16Y_U32XY
 
-	REP	#$20
+	REP	#$21	; include carry
 .A16
-	CLC
 	TYA
 	ADC	#.loword(Random__MTH_C)
 	STA	Seed
