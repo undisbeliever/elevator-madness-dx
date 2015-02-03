@@ -25,8 +25,6 @@ ROUTINE Main
 	REPEAT
 		JSR	Splash__SplashScreen
 
-		JSR	Game__Init
-
 		JSR	Game__PlayGame
 	FOREVER
 

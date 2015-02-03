@@ -44,6 +44,13 @@ NPC_MAX_FEELINGS_SPEED	= 400 ; ~8.1 seconds to angry
 MIN_SPAWN_COUNTDOWN     =  5 * 60
 MAX_SPAWN_COUNTDOWN     = 12 * 60
 
+WRONG_FLOOR_ARROW_DELAY = 30
+
+FIGHTING_FRAME_DELAY	= 9
+FIGHTING_CHARATTR	= (1 << OAM_CHARATTR_PALETTE_SHIFT) | (3 << OAM_CHARATTR_ORDER_SHIFT) | 32
+N_FIGHTING_FRAMES	= 5
+ 
+
 NPC_LINE_SPACING	= 18
 NPC_LEFT_WAIT_XPOS	= 60
 NPC_RIGHT_WAIT_XPOS	= 256 - NPC_LEFT_WAIT_XPOS
@@ -88,7 +95,14 @@ IMPORT_MODULE Npcs
 	ROUTINE Init
 
 	;; Processes each NPC for a single frame.
+	;;
+	;; REQUIRES: 8 bit A, 16 bit Index
 	ROUTINE Process
+
+	;; Draws the NPCs to the metaSprite code
+	;;
+	;; REQUIRES: 8 bit A, 16 bit Index
+	ROUTINE	DrawSprites
 
 	;; Notify the NPC that the elevator is going to open the door
 	;;

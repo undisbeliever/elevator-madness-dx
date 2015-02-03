@@ -668,32 +668,71 @@ ROUTINE ContinueMovingDown
 ROUTINE SetCrashed
 	; elevator.state = ELEVATOR_CRASHED
 	; play(SOUND_ELEVATOR_CRASHED)
-	; ::TODO notify Game that elevator crashed::
+	;
+	; strikeAnimationRopeTile = Memory[tileTable + ElevatorTilePositionTable::ropePos]
+	; Game__strikeAntimationRoutinePtr = StrikeAnimationRopeBreaking
+
 
 	LDY	#ELEVATOR_CRASHED
 	STY	ElevatorStruct::state
 
 	;; ::SOUND elevator moving::
 
+	LDY	ElevatorStruct::tileTable
+	LDX	a:ElevatorTilePositionTable::ropePos, Y
+	STX	strikeAnimationRopeTile
+
+	LDX	#.loword(StrikeAnimationRopeBreaking)
+	STX	Game__strikeAntimationRoutinePtr
+
 	RTS
 
 
 
+
 ; DP = selected elevator
+; Blank routines
 .A8
 .I16
 ROUTINE ContinueCrashed
-	; ::TODO animation to show crash::
-	STP
-
+ROUTINE ContinueNpcEntering
+ROUTINE ContinueNpcLeaving
 	RTS
 
 
-; DP = selected elevator
+
+.segment "SHADOW"
+	;; Location of rope tile to remove.
+	;; Used by StrikeAnimationRopeBreaking
+	ADDR	strikeAnimationRopeTile
+
+.code
+
+;; Animates the Rope breaking when elevator goes over/under
+;; Called once per frame
 .A8
 .I16
-ROUTINE ContinueNpcEntering
-ROUTINE ContinueNpcLeaving
+ROUTINE StrikeAnimationRopeBreaking
+	; if strikeAnimationRopeTile < 28 * 64
+	; 	interactiveBgBuffer[strikeAnimationRopeTile] = 0
+	; 	strikeAnimationRopeTile += 64
+
+	STZ	updateBgBufferOnZero
+
+	REP	#$30
+.A16
+
+	LDX	strikeAnimationRopeTile
+	CPX	#28 * 64
+	IF_LT
+		STZ	interactiveBgBuffer, X
+
+		TXA
+		ADD	#64
+		STA	strikeAnimationRopeTile
+	ENDIF
+
+	SEP	#$20
 	RTS
 
 

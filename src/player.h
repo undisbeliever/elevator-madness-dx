@@ -64,7 +64,12 @@ IMPORT_MODULE Player
 
 	;; Processes the player for a single frame.
 	ROUTINE Process
-	
+
+	;; Draws the NPCs to the metaSprite code
+	;;
+	;; REQUIRES: 8 bit A, 16 bit Index
+	ROUTINE	DrawSprites
+
 ENDMODULE
 
 .endif ; ::_PLAYER_H_

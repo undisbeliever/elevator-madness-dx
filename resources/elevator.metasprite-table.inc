@@ -48,3 +48,26 @@ MetaSprite_businessMan:
 	.addr MetaSprite_businessMan_fightingWalkLeft
 	.addr MetaSprite_businessMan_fightingWaitLeft
 
+MetaSpriteFrameTable_fighting:
+MetaSprite_fightingCloud:
+	; FrameSet fightingCloud
+	.addr MetaSprite_fightingCloud_frame0
+	.addr MetaSprite_fightingCloud_frame1
+	.addr MetaSprite_fightingCloud_frame2
+	.addr MetaSprite_fightingCloud_frame3
+	.addr MetaSprite_fightingCloud_frame4
+
+MetaSpriteFrameTable_leftRight:
+MetaSprite_wrongFloor0:
+	; FrameSet leftRight
+	.addr MetaSprite_wrongFloor0_left
+	.addr MetaSprite_wrongFloor0_right
+MetaSprite_wrongFloor1:
+	; FrameSet leftRight
+	.addr MetaSprite_wrongFloor1_left
+	.addr MetaSprite_wrongFloor1_right
+MetaSprite_lightingZap:
+	; FrameSet leftRight
+	.addr MetaSprite_lightingZap_left
+	.addr MetaSprite_lightingZap_right
+

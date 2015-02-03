@@ -1,6 +1,7 @@
 ; Inturrupt Handlers for Elevator Madness DX
 .include "game.h"
 .include "routines/block.h"
+.include "routines/screen.h"
 
 ;; Blank Handlers
 ROUTINE IrqHandler
@@ -22,6 +23,7 @@ ROUTINE VBlank
 .A8
 .I16
 
+	Screen_VBlank
 	MetaSprite_VBlank
 
 	LDA	updateBgBufferOnZero

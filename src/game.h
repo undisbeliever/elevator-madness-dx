@@ -44,14 +44,25 @@ GAME_OAM_NAME	= 0
 
 
 
-N_STRIKES = 3
-
+N_STRIKES		= 3
+STRIKE_MIN_FRAMES	= 1 * 60
+STRIKE_TIMEOUT		= 9 * 60
+GAME_OVER_FADEOUT_SPEED	= 5
 
 
 SCORE_DIGIT_DELTA 	= 16
 SCORE_TILE_COLUMN	= 2
 SCORE_TILE_ROW		= 14
 SCORE_TILE_ATTR 	= 7 << TILEMAP_HIGH_PALETTE_SHIFT
+
+STRIKES_TILE_COLUMN	= 3
+STRIKES_TILE_ROW	= 14
+STRIKES_TILE_CHARATTR 	= 7 << TILEMAP_PALETTE_SHIFT
+
+STRIKES_FULL_TOP_TILE	= 14
+STRIKES_FULL_BOTTOM_TILE= 30
+STRIKES_HALF_TOP_TILE	= 15
+STRIKES_HALF_BOTTOM_TILE= 31
 
 
 .global	interactiveBgBuffer
@@ -65,19 +76,17 @@ IMPORT_MODULE Game
 	WORD	score
 
 	;; The new buttons pressed by player 1 in this frame
-	WORD	buttonsPressed
+	WORD	newJoypadPressed
 
-	;; Initializes the game.
-	ROUTINE Init
+
+	;; If this ptr is set then there is a Strike Against the player.
+	;;
+	;; This pointer is to a routine that is called once per frame.
+	ADDR	strikeAntimationRoutinePtr
 
 	;; Builds and processes the game.
 	ROUTINE PlayGame
 
-	;; Sets up the Screen Registers and loads VRAM
-	;;
-	;; REQUIRES: 8 bit A, 16 bit Index
-	ROUTINE SetupScreen
-	
 ENDMODULE
 
 .endif ; ::_GAME_H_

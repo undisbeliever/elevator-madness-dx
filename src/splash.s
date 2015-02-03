@@ -93,7 +93,7 @@ ROUTINE FadeInOutScreen
 
 	STX	timer
 
-	JSR	FadeIn
+	JSR	Screen__FadeIn
 
 	REPEAT
 		JSR	Random__AddJoypadEntropy
@@ -102,7 +102,7 @@ ROUTINE FadeInOutScreen
 		LDX	timer
 		DEX
 		IF_ZERO
-			JSR	FadeOut
+			JSR	Screen__FadeOut
 			LDA	#1
 			RTS
 		ENDIF
@@ -118,57 +118,10 @@ ROUTINE FadeInOutScreen
 .A8
 	UNTIL_NOT_ZERO
 
-	JSR	FadeOut
+	JSR	Screen__FadeOut
 
 	LDA	#0
 	RTS
-
-
-
-; Starts at brightness 0 and Fades in the screen to full brightness
-.A8
-.I16
-ROUTINE FadeIn
-	STZ	screenBrightness
-
-	REPEAT
-		LDA	screenBrightness
-		CMP	#16
-	WHILE_LT
-		STA	INIDISP
-		INC	screenBrightness
-
-		JSR	Random__AddJoypadEntropy
-		WAI
-	WEND
-
-	RTS
-
-
-
-; Fades Out the screen then goes Blank
-.A8
-.I16
-ROUTINE FadeOut
-	LDA	#15 + 1
-	STA	screenBrightness
-
-	REPEAT
-		LDA	screenBrightness
-	WHILE_NOT_ZERO
-		DEC
-		STA	INIDISP
-		STA	screenBrightness
-
-		JSR	Random__AddJoypadEntropy
-		WAI
-	WEND
-
-	LDA	#INIDISP_FORCE
-	STA	INIDISP
-
-	RTS
-
 
 
 ; Sets up the game screen

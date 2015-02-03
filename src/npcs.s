@@ -7,6 +7,7 @@
 .include "elevators.h"
 .include "random.h"
 .include "routines/math.h"
+.include "routines/block.h"
 .include "routines/metasprite.h"
 
 MODULE Npcs
@@ -80,6 +81,17 @@ MODULE Npcs
 	SINT16	feelingsSpeed
 
 
+	;; Strike Animation variables
+
+	;;; animation frame number (as a muliple of 2)
+	ADDR	strike_frame
+	;;; current frame number
+	BYTE	strike_frameTimeout
+	;;; The NPC the strike is for
+	WORD	strike_npc
+	;;; If 0 then hide NPCs arrow
+	BYTE	strike_hideArrowsOnZero
+
 .rodata
 LABEL NpcStateTable
 	.addr 0
@@ -95,11 +107,10 @@ LABEL NpcStateTable
 .A8
 .I16
 ROUTINE Init
-	LDX	#NPC_DEAD
-
-	.repeat	N_NPCS, n
-		STX	npcs + n * .sizeof(npcs)
-	.endrepeat
+	;; ::BUGFIX previous games NPCs still visible ::
+	;; ::: Have ABSOLUTELY NO CLUE why the old code didn't work. ::
+	;; ::: Just gave up after 20 mins and clear all the memory assosiated with NPCs ::
+	MemClear npcs
 
 	LDX	#NPC_FEELINGS_SPEED
 	STX	feelingsSpeed
@@ -113,17 +124,61 @@ ROUTINE Init
 ; inline routine that draws the NPC to the screen
 ; dp = npc
 .macro Process_DrawNpc
-	LDY	NpcStruct::xPos + 1
-	STY	MetaSprite__xPos
-
-	LDY	NpcStruct::yPos + 1
-	STY	MetaSprite__yPos
-
-	LDY	NpcStruct::spriteCharAttr
-	LDX	NpcStruct::spriteFramePtr
-
-	JSR	MetaSprite__ProcessMetaSprite_Y
 .endmacro
+
+
+.A8
+.I16
+ROUTINE DrawSprites
+	; for dp in npcs
+	;	if dp.state != NPC_DEAD && dp.state != NPC_LIMBO
+	;		MetaSprite__ProcessMetaSprite_Y(npc.xpos, npc.ypos, npc.spriteCharAttr, npc.spriteFramePtr)
+
+	PHD
+
+	REP	#$30
+.A16
+	LDA	#npcs
+
+	REPEAT
+		TCD
+
+		.assert NPC_DEAD = 0, error, "NPC_DEAD != 0"
+
+		LDX	NpcStruct::state
+		IF_NOT_ZERO
+			LDX	NpcStruct::state
+			CPX	#NPC_LIMBO
+			IF_NE
+				SEP	#$20
+.A8
+				LDY	NpcStruct::xPos + 1
+				STY	MetaSprite__xPos
+
+				LDY	NpcStruct::yPos + 1
+				STY	MetaSprite__yPos
+
+				LDY	NpcStruct::spriteCharAttr
+				LDX	NpcStruct::spriteFramePtr
+
+				JSR	MetaSprite__ProcessMetaSprite_Y
+
+				REP	#$30
+			ENDIF
+.A16
+
+		ENDIF
+
+		TDC
+		ADD	#.sizeof(NpcStruct)
+
+		CMP	#npcs + N_NPCS * .sizeof(NpcStruct)
+	UNTIL_GE
+
+	SEP	#$20
+.A8
+	PLD
+	RTS
 
 
 
@@ -135,8 +190,6 @@ ROUTINE Process
 	;		nextFreeNpcPtr = dp
 	;	else
 	;		NpcStateTable[dp.state](dp)
-	;		if dp.state != NPC_LIMBO
-	;			drawNpc(dp)
 	;
 	; if --countdownToNextNpc == 0
 	;	Spawn()
@@ -161,12 +214,6 @@ ROUTINE Process
 			SEP	#$20
 .A8
 			JSR	(.loword(NpcStateTable), X)
-
-			LDX	NpcStruct::state
-			CPX	#NPC_LIMBO
-			IF_NE
-				Process_DrawNpc
-			ENDIF
 
 			REP	#$30
 		ENDIF
@@ -367,9 +414,9 @@ ROUTINE Spawn
 	STY	NpcStruct::feelingsTimeout
 
 	; ::TODO random NPC sprite::
-	LDY	#7 << OAM_CHARATTR_PALETTE_SHIFT | 2 << OAM_CHARATTR_ORDER_SHIFT | (512 - 32)
+	LDY	Npcs_SpriteCharAttr
 	STY	NpcStruct::spriteCharAttr
-	LDX	#.loword(MetaSprite_businessMan)
+	LDX	Npcs_SpriteFrameTablePtr
 	STX	NpcStruct::spriteFrameTablePtr
 
 	JSR	CalculateSpriteFramePtr
@@ -606,7 +653,7 @@ ROUTINE WaitingInLine
 	;		CalculateSpriteFramePtr()
 	; else
 	;	if npc.nextNpcInLine
-	;		SetFighting
+	;		SetFighting()
 
 	JSR	ProcessWaitAnimation
 
@@ -952,8 +999,48 @@ ROUTINE ContinueWalkOffscreen
 .A8
 .I16
 ROUTINE SetWrongFloor
-	;; ::TODO SetFighting::
-	STP
+	; strike_npc = npc
+	; strike_frameTimeout = 1
+	; strike_hideArrowsOnZero = 0
+	; if npc.leftSideOnZero == 0
+	;	strike_frame = Random__Rnd_2() == 0 ? MetaSprite_wrongFloor0_left : MetaSprite_wrongFloor1_left
+	; else
+	;	strike_frame = Random__Rnd_2() == 0 ? MetaSprite_wrongFloor0_right : MetaSprite_wrongFloor1_right
+	;
+	; Game__strikeAntimationRoutinePtr = StrikeAnimationWrongFloor
+
+	TDC
+	STA	strike_npc
+	XBA
+	STA	strike_npc + 1
+
+	LDA	#1
+	STA	strike_frameTimeout
+
+	STZ	strike_hideArrowsOnZero
+
+	LDA	NpcStruct::leftSideOnZero
+	IF_ZERO
+		JSR	Random__Rnd_2
+		IF_ZERO
+			LDX	#.loword(MetaSprite_wrongFloor0_left)
+		ELSE
+			LDX	#.loword(MetaSprite_wrongFloor1_left)
+		ENDIF
+	ELSE
+		JSR	Random__Rnd_2
+		IF_ZERO
+			LDX	#.loword(MetaSprite_wrongFloor0_right)
+		ELSE
+			LDX	#.loword(MetaSprite_wrongFloor1_right)
+		ENDIF
+	ENDIF
+
+	STX	strike_frame
+
+	LDX	#.loword(StrikeAnimationWrongFloor)
+	STX	Game__strikeAntimationRoutinePtr
+
 	RTS
 
 
@@ -962,9 +1049,31 @@ ROUTINE SetWrongFloor
 .A8
 .I16
 ROUTINE SetFighting
-	;; ::TODO SetFighting::
-	STZ	INIDISP
-	STP
+	; // hide the two sprites
+	; npc.nextNpcInLine->state = NPC_DEAD
+	; npc.state = NPC_DEAD
+	;
+	; strike_npc = npc.nextNpcInLine
+	; strike_frame = 0
+	; strike_frameTimeout = FIGHTING_FRAME_DELAY
+	;
+	; Game__strikeAntimationRoutinePtr = StrikeAnimationFighting
+
+	LDX	NpcStruct::nextNpcInLine
+	STZ	a:NpcStruct::state, X
+	STZ	NpcStruct::state
+
+	STX	strike_npc
+
+	LDY	#0
+	STY	strike_frame
+
+	LDA	#FIGHTING_FRAME_DELAY
+	STA	strike_frameTimeout
+
+	LDX	#.loword(StrikeAnimationFighting)
+	STX	Game__strikeAntimationRoutinePtr
+
 	RTS
 
 
@@ -998,6 +1107,117 @@ ROUTINE NpcOffscreen
 	;; ::SOUND award point::
 
 	RTS
+
+
+
+;; Animates the NPCs wrong floor animation
+;; Called once per frame
+.A8
+.I16
+ROUTINE StrikeAnimationWrongFloor
+	; strike_frameTimeout--
+	; if strike_frameTimeout == 0
+	;	strike_frameTimeout = WRONG_FLOOR_ARROW_DELAY
+	;	npc = strike_npc
+	;	if strike_hideArrowsOnZero == 0
+	;		ClearArrows(npc)
+	;		strike_hideArrowsOnZero = 1
+	;	else
+	;		DrawArrows(npc)
+	;		strike_hideArrowsOnZero = 0
+	;
+	;	MetaSprite__ProcessMetaSprite_Y(strike_npc->xPos, strike_npc->yPos, FIGHTING_CHARATTR, strike_frame)
+
+	DEC	strike_frameTimeout
+	IF_ZERO
+		LDA	#WRONG_FLOOR_ARROW_DELAY
+		STA	strike_frameTimeout
+
+		PHD
+		LDA	strike_npc + 1
+		XBA
+		LDA	strike_npc
+		TCD
+
+		LDA	strike_hideArrowsOnZero
+		IF_ZERO
+			JSR	ClearArrows
+			INC	strike_hideArrowsOnZero
+		ELSE
+			JSR	DrawArrows
+			STZ	strike_hideArrowsOnZero
+		ENDIF
+
+		PLD
+	ENDIF
+
+	LDX	strike_npc
+	LDA	a:NpcStruct::xPos + 1, X
+	STA	MetaSprite__xPos
+
+	LDA	a:NpcStruct::yPos + 1, X
+	STA	MetaSprite__yPos
+
+	LDY	#FIGHTING_CHARATTR
+	LDX	strike_frame
+
+	JMP	MetaSprite__ProcessMetaSprite_Y
+
+
+
+
+;; Animates the NPC fighting animation.
+;; Called once per frame
+.A8
+.I16
+ROUTINE StrikeAnimationFighting
+	; strike_frameTimeout--
+	; if strike_frameTimeout == 0
+	;	strike_frameTimeoute = FIGHTING_FRAME_DELAY
+	;	if strike_frame >= (N_FIGHTING_FRAMES - 1) * 2
+	;		strike_frame = 0
+	;	else
+	;		strike_frame += 2
+	;
+	;	MetaSprite__ProcessMetaSprite_Y(strike_npc->xPos, strike_npc->yPos, FIGHTING_CHARATTR, MetaSprite_fightingCloud[strike_frame])
+
+	DEC	strike_frameTimeout
+	IF_ZERO
+		LDA	#FIGHTING_FRAME_DELAY
+		STA	strike_frameTimeout
+
+		LDY	strike_frame
+		CPY	#(N_FIGHTING_FRAMES - 1) * 2
+		IF_GE
+			LDY	#0
+		ELSE
+			INY
+			INY
+		ENDIF
+
+		STY	strike_frame
+	ENDIF
+
+	LDX	strike_npc
+	LDA	a:NpcStruct::xPos + 1, X
+	STA	MetaSprite__xPos
+
+	LDA	a:NpcStruct::yPos + 1, X
+	STA	MetaSprite__yPos
+
+	LDY	#FIGHTING_CHARATTR
+
+	REP	#$30
+.A16
+
+	LDX	strike_frame
+	LDA	f:MetaSprite_fightingCloud, X
+	TAX
+
+	SEP	#$20
+.A8
+
+	JMP	MetaSprite__ProcessMetaSprite_Y
 
 
 
@@ -1183,6 +1403,17 @@ ROUTINE ClearArrows
 	BRA	_DrawArrows_ToTilemap
 
 .rodata
+
+
+;; A list of NPC MetaSprites Frame Tables
+LABEL Npcs_SpriteFrameTablePtr
+	.addr MetaSprite_businessMan
+
+
+;; The CharAttr values of the NPCs (matches `Npcs_SpriteFrameTablePtr`)
+LABEL Npcs_SpriteCharAttr
+	.word 7 << OAM_CHARATTR_PALETTE_SHIFT | 2 << OAM_CHARATTR_ORDER_SHIFT | (512 - 32)
+
 
 
 LABEL ArrowsLocationsLeft

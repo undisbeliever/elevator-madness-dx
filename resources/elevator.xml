@@ -1,5 +1,6 @@
 <project>
 <tileset id="player" format="TILES_4BPP" filename="player.4bpp"></tileset>
+<tileset id="strikeAnimations" format="TILES_4BPP" filename="strike-animations.4bpp"></tileset>
 <tileset id="businessMan" format="TILES_4BPP" filename="business-man.4bpp"></tileset>
 <frameset id="player">
 	<framedescription id="standRight" name="Facing right"/>
@@ -42,6 +43,17 @@
 	<framedescription id="fightingStandLeft" name="Facing left - fighting"/>
 	<framedescription id="fightingWalkLeft" name="Facing left, moving legs - fighting"/>
 	<framedescription id="fightingWaitLeft" name="Facing left, impatient - fighting"/>
+</frameset>
+<frameset id="fightingCloud">
+	<framedescription id="frame0" />
+	<framedescription id="frame1" />
+	<framedescription id="frame2" />
+	<framedescription id="frame3" />
+	<framedescription id="frame4" />
+</frameset>
+<frameset id="leftRight">
+	<framedescription id="left" />
+	<framedescription id="right" />
 </frameset>
 <spritegroup id="elevator">
 	<sprite id="player" frameset="player" tileset="player">
@@ -238,6 +250,66 @@
 			<object xpos="-8" ypos="-24" tile="4" size="big" />
 			<object xpos="-8" ypos="-8" tile="8" size="small" />
 			<object xpos="0" ypos="-8" tile="9" size="small" />
+		</frame>
+	</sprite>
+</spritegroup>
+<spritegroup id="fighting" frameset="fightingCloud">
+	<sprite id="fightingCloud" tileset="strikeAnimations">
+		<frame implements="frame0">
+			<object xpos="-16" ypos="-28" tile="4" size="big" />
+			<object xpos="0" ypos="-28" tile="6" size="big" />
+			<object xpos="-16" ypos="-12" tile="36" size="big" />
+			<object xpos="0" ypos="-12" tile="38" size="big" />
+		</frame>
+		<frame implements="frame1">
+			<object xpos="-16" ypos="-28" tile="8" size="big" />
+			<object xpos="-0" ypos="-28" tile="10" size="big" />
+			<object xpos="-16" ypos="-12" tile="40" size="big" />
+			<object xpos="0" ypos="-12" tile="42" size="big" />
+		</frame>
+		<frame implements="frame2">
+			<object xpos="-16" ypos="-28" tile="12" size="big" />
+			<object xpos="0" ypos="-28" tile="14" size="big" />
+			<object xpos="-16" ypos="-12" tile="44" size="big" />
+			<object xpos="0" ypos="-12" tile="46" size="big" />
+		</frame>
+		<frame implements="frame3">
+			<object xpos="-16" ypos="-28" tile="14" size="big" vflip="vflip" />
+			<object xpos="0" ypos="-28" tile="12" size="big" vflip="vflip" />
+			<object xpos="-16" ypos="-12" tile="46" size="big" vflip="vflip" />
+			<object xpos="0" ypos="-12" tile="44" size="big" vflip="vflip" />
+		</frame>
+		<frame implements="frame4">
+			<object xpos="-16" ypos="-28" tile="6" size="big" vflip="vflip" />
+			<object xpos="0" ypos="-28" tile="4" size="big" vflip="vflip" />
+			<object xpos="-16" ypos="-12" tile="38" size="big" vflip="vflip" />
+			<object xpos="0" ypos="-12" tile="36" size="big" vflip="vflip" />
+		</frame>
+	</sprite>
+</spritegroup>
+<spritegroup id="leftRight" frameset="leftRight">
+	<sprite id="wrongFloor0" tileset="strikeAnimations">
+		<frame implements="left">
+			<object xpos="0" ypos="-32" tile="0" size="big" />
+		</frame>
+		<frame implements="right">
+			<object xpos="0" ypos="-32" tile="0" size="big" />
+		</frame>
+	</sprite>
+	<sprite id="wrongFloor1" tileset="strikeAnimations">
+		<frame implements="left">
+			<object xpos="0" ypos="-32" tile="2" size="big" />
+		</frame>
+		<frame implements="right">
+			<object xpos="-16" ypos="-32" tile="2" size="big" />
+		</frame>
+	</sprite>
+	<sprite id="lightingZap" tileset="strikeAnimations">
+		<frame implements="left">
+			<object xpos="-16" ypos="-10" tile="32" size="small" />
+		</frame>
+		<frame implements="right">
+			<object xpos="8" ypos="-10" tile="32" size="small" vflip="vflip" />
 		</frame>
 	</sprite>
 </spritegroup>

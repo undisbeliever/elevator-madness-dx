@@ -79,8 +79,13 @@ ROUTINE Process
 	SEP	#$20
 .A8
 
-	JSR	CheckWallCollision
+	JMP	CheckWallCollision
 
+
+
+.A8
+.I16
+ROUTINE DrawSprites
 	; Display Frame
 	LDA	xPos + 1
 	STA	MetaSprite__xPos
@@ -160,7 +165,7 @@ ROUTINE ContinueWalking
 	REP	#$30
 .A16
 
-	LDA	Game__buttonsPressed
+	LDA	Game__newJoypadPressed
 	IF_BIT	#BUTTON_ELEVATOR_DOOR | BUTTON_ELEVATOR_UP | BUTTON_ELEVATOR_DOWN
 		SEP	#$20
 		JMP	SetPushButtonState
@@ -784,7 +789,8 @@ CheckWallCollision_OnRafter:
 	ENDIF
 
 	RTS
-	
+
+
 .rodata
 
 ;; A Row table for the rafter.

@@ -41,6 +41,15 @@
 	MetaSpriteFrame_npc_fightingStandLeft = 21
 	MetaSpriteFrame_npc_fightingWalkLeft = 22
 	MetaSpriteFrame_npc_fightingWaitLeft = 23
+	; MetaSpriteFrame_fightingCloud
+	MetaSpriteFrame_fightingCloud_frame0 = 0
+	MetaSpriteFrame_fightingCloud_frame1 = 1
+	MetaSpriteFrame_fightingCloud_frame2 = 2
+	MetaSpriteFrame_fightingCloud_frame3 = 3
+	MetaSpriteFrame_fightingCloud_frame4 = 4
+	; MetaSpriteFrame_leftRight
+	MetaSpriteFrame_leftRight_left = 0
+	MetaSpriteFrame_leftRight_right = 1
 
 
 .global MetaSpriteFrameTable
@@ -88,4 +97,23 @@
 	.global MetaSprite_businessMan_fightingStandLeft
 	.global MetaSprite_businessMan_fightingWalkLeft
 	.global MetaSprite_businessMan_fightingWaitLeft
+
+.global MetaSpriteFrameTable_fighting
+.global MetaSprite_fightingCloud
+	.global MetaSprite_fightingCloud_frame0
+	.global MetaSprite_fightingCloud_frame1
+	.global MetaSprite_fightingCloud_frame2
+	.global MetaSprite_fightingCloud_frame3
+	.global MetaSprite_fightingCloud_frame4
+
+.global MetaSpriteFrameTable_leftRight
+.global MetaSprite_wrongFloor0
+	.global MetaSprite_wrongFloor0_left
+	.global MetaSprite_wrongFloor0_right
+.global MetaSprite_wrongFloor1
+	.global MetaSprite_wrongFloor1_left
+	.global MetaSprite_wrongFloor1_right
+.global MetaSprite_lightingZap
+	.global MetaSprite_lightingZap_left
+	.global MetaSprite_lightingZap_right
 

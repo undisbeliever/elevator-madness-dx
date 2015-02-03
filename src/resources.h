@@ -22,11 +22,15 @@ IMPORT_BINARY controlsPalette
 IMPORT_BINARY interactiveTiles
 IMPORT_BINARY interactivePalette
 
+IMPORT_BINARY strikeAnimationsTiles
+IMPORT_BINARY strikeAnimationsPalette
+
 IMPORT_BINARY playerTiles
 IMPORT_BINARY playerPalette
 
 IMPORT_BINARY businessManTiles
 IMPORT_BINARY businessManPalette
+
 
 .endif ; ::_RESOURCES_H_
 

@@ -62,7 +62,9 @@ IMPORT_MODULE Random
 	;; Generates a random number between 0 and 1 (inclusive)
 	;;
 	;; REQUIRE: 8 bit A, 16 bit Index
-	;; RETURN: A = random number between 0 and 1 (inclusive)
+	;; RETURN:
+	;;	A: random number between 0 and 1 (inclusive)
+	;;	z: set if A is 0
 	ROUTINE	Rnd_2
 
 	;; Generates a 16 bit random number between X and Y
