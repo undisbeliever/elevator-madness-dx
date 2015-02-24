@@ -1,7 +1,7 @@
 .ifndef ::_GAME_H_
 ::_GAME_H_ = 1
 
-.define VERSION 1
+.define VERSION 2
 .define REGION NTSC
 .define ROM_NAME "ELEVATOR MADNESS DX"
 

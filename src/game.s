@@ -2,7 +2,6 @@
 
 .include "game.h"
 .include "npcs.h"
-.include "random.h"
 .include "player.h"
 .include "elevators.h"
 
@@ -10,6 +9,7 @@
 .include "routines/screen.h"
 .include "routines/block.h"
 .include "routines/math.h"
+.include "routines/random.h"
 
 
 .segment "SHADOW"

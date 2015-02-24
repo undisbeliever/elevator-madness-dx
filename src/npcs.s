@@ -5,10 +5,11 @@
 .include "game.h"
 .include "npcs.h"
 .include "elevators.h"
-.include "random.h"
+
 .include "routines/math.h"
 .include "routines/block.h"
 .include "routines/metasprite.h"
+.include "routines/random.h"
 
 MODULE Npcs
 

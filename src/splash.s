@@ -5,10 +5,10 @@
 ; Primary used to prime the Random Number Generator
 
 .include "splash.h"
-.include "random.h"
 
 .include "includes/registers.inc"
 .include "routines/screen.h"
+.include "routines/random.h"
 .include "routines/block.h"
 
 .code
