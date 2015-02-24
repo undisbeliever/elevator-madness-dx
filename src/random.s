@@ -98,6 +98,8 @@ ROUTINE Rnd_2
 
 	RTS
 
+
+
 ; X = min
 ; Y = max
 .A8
@@ -112,12 +114,12 @@ ROUTINE	Rnd_U16X_U16Y
 .A16
 	PLA
 	SUB	tmp
-	TAY
+	TAX
 
-	LDX	Seed + 1
+	LDY	Seed + 1
 	JSR	Math__Divide_U16Y_U16X
 
-	TYA
+	TXA
 	ADD	tmp
 	TAY
 

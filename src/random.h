@@ -1,7 +1,6 @@
 .ifndef ::_RANDOM_H_
 ::_RANDOM_H_ = 1
 
-.include "game.h"
 .setcpu "65816"
 
 .include "includes/import_export.inc"
@@ -20,10 +19,13 @@
 ;;
 ;;
 ;; To generate a random number between 1 and ?
-;; RndNum = (Seed+2) MOD ? + 1
+;; RndNum = {Seed+2} MOD ? + 1
 ;;
-;; The only certain thing about this random number generator
-;; is that the seed alternates between odd and even
+;; In order to increase the observed randomness of this module,
+;; the function `AddJoypadEntropy` should be called once every frame.
+;; This will cycle the random number generator once or twice, depending
+;; on the state of JOY1.
+
 IMPORT_MODULE Random
 
 	; These numbers were selected at random, following the rules
