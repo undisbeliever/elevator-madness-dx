@@ -22,6 +22,8 @@ ROUTINE VBlank
 	SEP #$20
 .A8
 .I16
+	; Reset NMI Flag.
+	LDA	RDNMI
 
 	Screen_VBlank
 	MetaSprite_VBlank
