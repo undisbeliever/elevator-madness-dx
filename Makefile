@@ -2,7 +2,7 @@
 BINARY      = bin/Elevator_Madess_DX.sfc
 API_MODULES = reset-snes block screen metasprite math random
 API_DIR     = snesdev-common
-CONFIG      = LOROM_1MBit
+CONFIG      = LOROM_1MBit_copyright
 
 SOURCES     = $(wildcard src/*.s)
 OBJECTS     = $(patsubst src/%.s,obj/%.o,$(SOURCES))
