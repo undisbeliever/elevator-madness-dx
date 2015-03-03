@@ -4,6 +4,7 @@
 .include "npcs.h"
 .include "player.h"
 .include "elevators.h"
+.include "controler.h"
 
 .include "routines/metasprite.h"
 .include "routines/screen.h"
@@ -27,8 +28,6 @@ MODULE Game
 
 	ADDR	strikeAntimationRoutinePtr
 
-	WORD	inversePrevButtons
-	WORD	newJoypadPressed
 	WORD	strikeTimeout
 
 
@@ -120,13 +119,9 @@ ROUTINE InitForLife
 .I16
 ROUTINE GameLoop
 	REPEAT
-		JSR	Random__AddJoypadEntropy
-
 		JSR	Screen__WaitFrame
 
 		JSR	MetaSprite__InitLoop
-
-		JSR	HandleButtons
 
 		JSR	Player__Process
 		JSR	Elevators__Process
@@ -160,7 +155,7 @@ ROUTINE StrikeAnimation
 	; repeat
 	;	StrikeAnimationFrame()
 	;	strikeTimeout--
-	; until strikeTimeout == 0 || (newJoypadPressed & JOY_BUTTONS) != 0
+	; until strikeTimeout == 0 || (Controler__pressed & JOY_BUTTONS) != 0
 
 	LDY	#STRIKE_MIN_FRAMES
 	REPEAT
@@ -178,7 +173,7 @@ ROUTINE StrikeAnimation
 
 		REP	#$30
 .A16
-		LDA	newJoypadPressed
+		LDA	Controler__pressed
 		AND	#JOY_BUTTONS
 		SEP	#$20
 .A8
@@ -195,7 +190,6 @@ ROUTINE StrikeAnimation
 .I16
 ROUTINE StrikeAnimationFrame
 	; WaitFrame()
-	; HandleButtons()
 	; MetaSprite__InitLoop()
 	;
 	; *strikeAntimationRoutinePtr()
@@ -205,7 +199,6 @@ ROUTINE StrikeAnimationFrame
 	; MetaSprite__FinalizeLoop()
 
 	JSR	Screen__WaitFrame
-	JSR	HandleButtons
 
 	JSR	MetaSprite__InitLoop
 
@@ -218,26 +211,6 @@ _PlayGame_Return_:
 
 	STZ	updateBgBufferOnZero
 	JMP	MetaSprite__FinalizeLoop
-
-
-
-;; Populates newJoypadPressed variable
-ROUTINE HandleButtons
-	REP	#$30
-.A16
-	LDA	JOY1
-	AND	inversePrevButtons
-	STA	newJoypadPressed
-
-	LDA	JOY1
-	EOR	#$FFFF
-	STA	inversePrevButtons
-
-	SEP	#$20
-.A8
-	RTS
-
-
 
 
 ;; Displays the score on the foreground

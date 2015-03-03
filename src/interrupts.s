@@ -1,7 +1,9 @@
 ; Inturrupt Handlers for Elevator Madness DX
 .include "game.h"
+.include "controler.h"
 .include "routines/block.h"
 .include "routines/screen.h"
+.include "routines/random.h"
 
 ;; Blank Handlers
 ROUTINE IrqHandler
@@ -35,6 +37,9 @@ ROUTINE VBlank
 		; A not Zero
 		STA updateBgBufferOnZero
 	ENDIF
+
+	JSR	Controler__Update
+	JSR	Random__AddJoypadEntropy
 
 	; Load State
 	REP	#$30

@@ -11,6 +11,8 @@
 .include "routines/random.h"
 .include "routines/block.h"
 
+.include "controler.h"
+
 .code
 
 
@@ -78,8 +80,7 @@ ROUTINE FadeInOutScreen
 	;
 	; FadeIn()
 	; repeat
-	;	Random__AddJoypadEntropy()
-	;	Wait one frame
+	;	Screen__WaitFrame()
 	;
 	;	timer--
 	;	if timer == 0
@@ -87,17 +88,18 @@ ROUTINE FadeInOutScreen
 	;		return 1
 	;		break
 	;
-	; until JOY1 & JOY_BUTTONS | JOY_START | JOY_SELECT != 0
+	; until Controler__current & JOY_BUTTONS | JOY_START | JOY_SELECT != 0
 	;
 	; FadeOut()
+	;
+	; return 0
 
 	STX	timer
 
 	JSR	Screen__FadeIn
 
 	REPEAT
-		JSR	Random__AddJoypadEntropy
-		WAI
+		JSR	Screen__WaitFrame
 
 		LDX	timer
 		DEX
@@ -111,7 +113,7 @@ ROUTINE FadeInOutScreen
 
 		REP	#$30
 .A16
-		LDA	JOY1
+		LDA	Controler__current
 		AND	#JOY_BUTTONS | JOY_START | JOY_SELECT
 
 		SEP	#$20

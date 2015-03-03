@@ -41,12 +41,6 @@ PLAYER_TURN_ANIMATION_DELAY = 7		; Number of frames inbetween turning frames.
 PLAYER_BUTTON_ANIMATION_DELAY = 6	; Number of frames to show the players hand presseing that button.
 PLAYER_ZAPPED_ANIMATION_DELAY = 30	; Number of frames to show the player being zapped by the button.
 
-
-BUTTON_JUMP		= JOY_B
-BUTTON_ELEVATOR_DOOR	= JOY_Y
-BUTTON_ELEVATOR_UP	= JOY_UP | JOY_X
-BUTTON_ELEVATOR_DOWN	= JOY_DOWN | JOY_A
-
 .enum
 	PLAYER_WALKING		=  0
 	PLAYER_PUSH_BUTTON	=  2

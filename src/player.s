@@ -3,6 +3,7 @@
 .include "game.h"
 .include "player.h"
 .include "elevators.h"
+.include "controler.h"
 
 MODULE Player
 
@@ -165,7 +166,7 @@ ROUTINE ContinueWalking
 	REP	#$30
 .A16
 
-	LDA	Game__newJoypadPressed
+	LDA	Controler__pressed
 	IF_BIT	#BUTTON_ELEVATOR_DOOR | BUTTON_ELEVATOR_UP | BUTTON_ELEVATOR_DOWN
 		SEP	#$20
 		JMP	SetPushButtonState
@@ -178,7 +179,7 @@ ROUTINE ContinueWalking
 .A8
 
 	; only testing left/right, thus high byte
-	LDA	JOY1H
+	LDA	Controler__current + 1
 	IF_BIT	#JOYH_LEFT
 		; left pressed
 		LDA	facingRightOnZero
@@ -326,7 +327,7 @@ SetPushButtonState_InFrontOfSwitch:
 	REP	#$30
 .A16
 
-	LDA	JOY1
+	LDA	Controler__current
 	IF_BIT	#BUTTON_ELEVATOR_DOOR
 		SEP	#$20
 .A8
@@ -513,7 +514,7 @@ ROUTINE ContinueJumping
 
 	REP	#$20
 .A16
-	LDA	JOY1
+	LDA	Controler__current
 	AND	#BUTTON_JUMP
 	SEP	#$20
 .A8
@@ -543,7 +544,7 @@ ContinueJumping_Skip:
 		BPL	SetFallingState
 	ENDIF
 
-	LDA	JOY1H
+	LDA	Controler__current + 1
 	BIT	#JOYH_LEFT
 	IF_NOT_ZERO
 		; left pressed
@@ -621,7 +622,7 @@ ROUTINE ContinueFalling
 	SEP	#$20
 .A8
 
-	LDA	JOY1H
+	LDA	Controler__current + 1
 	BIT	#JOYH_LEFT
 	IF_NOT_ZERO
 		; left pressed
