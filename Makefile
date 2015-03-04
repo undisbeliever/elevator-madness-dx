@@ -17,6 +17,7 @@ all: resources api $(BINARY)
 
 $(BINARY): $(API_OBJECTS) $(OBJECTS)
 	ld65 -vm -m $(@:.sfc=.memlog) -C $(CONFIG_FILE) -o $@ $^
+	cd bin/ && ucon64 --snes --nhd --chk $(notdir $@)
 
 obj/%.o: src/%.s $(HEADERS) $(CONFIG_FILE) $(API_OBJECTS) $(RESOURCES)
 	ca65 -I . -I $(API_DIR) -o $@ $<

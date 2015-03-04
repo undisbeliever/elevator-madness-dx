@@ -52,4 +52,5 @@ Build Requirements
  * ca65
  * pcx2snes
  * gnu Make
+ * ucon64
 
