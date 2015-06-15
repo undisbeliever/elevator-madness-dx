@@ -2,8 +2,6 @@
 
 .include "game.h"
 .include "splash.h"
-.include "includes/sfc_header.inc"
-
 
 .include "routines/metasprite.h"
 

@@ -1,10 +1,6 @@
 .ifndef ::_GAME_H_
 ::_GAME_H_ = 1
 
-.define VERSION 2
-.define REGION NTSC
-.define ROM_NAME "ELEVATOR MADNESS DX"
-
 .setcpu "65816"
 
 ; Common includes
@@ -12,17 +8,13 @@
 .include "includes/synthetic.inc"
 .include "includes/registers.inc"
 .include "includes/structure.inc"
+.include "includes/config.inc"
+
 .include "routines/metasprite.h"
 
 .include "resources.h"
 
 .define N_FLOORS 4
-
-.if .xmatch(REGION, NTSC)
-	FPS = 60
-.else
-	FPS = 50
-.endif
 
 
 ;; VRAM Map
