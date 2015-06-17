@@ -1,34 +1,36 @@
 
-META = elevator.metasprite.h elevator.metasprite-table.inc elevator.metasprite-data.inc
-MAPS = background.map controls.map splash.map
-TILES = background.4bpp controls.4bpp splash.4bpp 
-TILES += interactive-tiles.4bpp strike-animations.4bpp
-TILES += player.4bpp business-man.4bpp
-PALETTES =  $(patsubst %.2bpp,%.clr,$(patsubst %.4bpp,%.clr,$(SOURCES)))
+MAPS      = $(patsubst %.pcx,%.map,$(wildcard images4bpp/*.pcx))
+TILES    += $(patsubst %.pcx,%.4bpp,$(wildcard images4bpp/*.pcx))
+TILES    += $(patsubst %.pcx,%.4bpp,$(wildcard tiles4bpp/*.pcx))
+TILES    += $(patsubst %.pcx,%.2bpp,$(wildcard tiles2bpp/*.pcx))
+PALETTES  = $(patsubst %.4bpp,%.clr,$(patsubst %.2bpp,%.clr,$(TILES)))
 
 .PHONY: ALL
 
-ALL: $(TILES) $(PALETTES) $(MAPS) $(META)
+ALL: metasprites $(MAPS) $(TILES) $(PALETTES)
 
-%.2bpp %.clr: %.pcx
-	pcx2snes -n -s8 -c4 -o4 $*
-	mv $*.pic $*.2bpp
+tiles2bpp/%.2bpp tiles2bpp/%.clr: tiles2bpp/%.pcx
+	pcx2snes -n -s8 -c4 -o4 $(basename $<)
+	mv $(basename $<).pic $(basename $<).2bpp
 
-%.4bpp %.clr: %.pcx
-	pcx2snes -n -s8 -c16 -o16 $*
-	mv $*.pic $*.4bpp
+tiles4bpp/%.4bpp tiles4bpp/%.clr: tiles4bpp/%.pcx
+	pcx2snes -n -s8 -c16 -o16 $(basename $<)
+	mv $(basename $<).pic $(basename $<).4bpp
 
-%.map %.4bpp %.clr: %.pcx
-	pcx2snes -r -s8 -c16 -screen $*
-	mv $*.pic $*.4bpp
+images4bpp/%.map images4bpp/%.4bpp images4bpp/%.clr: images4bpp/%.pcx
+	pcx2snes -r -s8 -c16 -screen $(basename $<)
+	mv $(basename $<).pic $(basename $<).4bpp
 
-%.metasprite.h %.metasprite-table.inc %.metasprite-data.inc: %.xml
-	metasprite-gen $< 
+
+.PHONY: metasprites
+metasprites:
+	cd metasprites/ && $(MAKE)
 
 
 .PHONY: clean
 clean:
-	$(RM) $(MAPS) $(TILES) $(PALETTES) $(META)
+	$(RM) $(MAPS) $(TILES) $(PALETTES)
+	cd metasprites/ && $(MAKE) clean
 
 .PRECIOUS: $(PALETTES)
 

@@ -3,8 +3,7 @@
 
 .include "includes/import_export.inc"
 
-; Include Autogen by snesdev-util
-.include "resources/elevator.metasprite.h"
+.include "resources/metasprites/elevator.metasprite.h"
 
 ;; Resources
 IMPORT_BINARY backgroundMap

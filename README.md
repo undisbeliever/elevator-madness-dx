@@ -37,7 +37,6 @@ Controls
 
 TODO
 ====
- * Test on real SNES Hardware
  * Add more NPCs
  * High Score Table
  * Include Elevator Madness classic in ROM.
@@ -48,7 +47,6 @@ TODO
 Build Requirements
 ===================
  * snesdev-common
- * snesdev-utils
  * ca65
  * pcx2snes
  * gnu Make
