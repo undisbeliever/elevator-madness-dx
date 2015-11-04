@@ -450,14 +450,14 @@ ROUTINE Spawn
 							; on left
 							LDA	a:NpcStruct::xPos + 1, X
 							CMP	a:NpcStruct::xPos + 1, Y
-							IF_SLT
+							IF_MINUS
 								TXY
 							ENDIF
 						ELSE
 							; on right
 							LDA	a:NpcStruct::xPos + 1, X
 							CMP	a:NpcStruct::xPos + 1, Y
-							IF_SGE
+							IF_PLUS
 								TXY
 							ENDIF
 						ENDIF
@@ -547,7 +547,7 @@ ROUTINE ContinueWalkToElevator
 		LDA	NpcStruct::xPos + 1
 		ADD	#NPC_LINE_SPACING
 		CMP	a:NpcStruct::xPos + 1, X
-		IF_SLT
+		IF_MINUS
 ContinueWalkToElevator_SkipLeftLineCheck:
 			REP	#$30
 .A16
@@ -555,7 +555,7 @@ ContinueWalkToElevator_SkipLeftLineCheck:
 
 			LDA	NpcStruct::xPos + 1
 			CMP	#NPC_LEFT_WAIT_XPOS
-			IF_SLT
+			IF_MINUS
 				LDA	NpcStruct::xPos
 				ADD	#NPC_WALK_SPEED
 				STA	NpcStruct::xPos
@@ -603,7 +603,7 @@ ContinueWalkToElevator_SkipLeftLineCheck:
 		LDA	NpcStruct::xPos + 1
 		SUB	#NPC_LINE_SPACING + 1
 		CMP	a:NpcStruct::xPos + 1, X
-		IF_SGE
+		IF_PLUS
 ContinueWalkToElevator_SkipRightLineCheck:
 			REP	#$30
 .A16
@@ -611,7 +611,7 @@ ContinueWalkToElevator_SkipRightLineCheck:
 
 			LDA	NpcStruct::xPos + 1
 			CMP	#NPC_RIGHT_WAIT_XPOS + 1
-			IF_SGE
+			IF_PLUS
 				LDA	NpcStruct::xPos
 				SUB	#NPC_WALK_SPEED
 				STA	NpcStruct::xPos
@@ -954,7 +954,7 @@ ROUTINE ContinueWalkOffscreen
 .A16
 		LDA	NpcStruct::xPos + 1
 		CMP	#.loword(NPC_LEFT_OFFSCREEN_XPOS)
-		IF_SGE
+		IF_PLUS
 			LDA	NpcStruct::xPos
 			SUB	#NPC_WALK_OFFSCREEN_SPEED
 			STA	NpcStruct::xPos
@@ -976,7 +976,7 @@ ROUTINE ContinueWalkOffscreen
 .A16
 		LDA	NpcStruct::xPos + 1
 		CMP	#.loword(NPC_RIGHT_OFFSCREEN_XPOS + 1)
-		IF_SLT
+		IF_MINUS
 			LDA	NpcStruct::xPos
 			ADD	#NPC_WALK_OFFSCREEN_SPEED
 			STA	NpcStruct::xPos
