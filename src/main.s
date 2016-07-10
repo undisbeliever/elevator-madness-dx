@@ -3,6 +3,7 @@
 .include "game.h"
 .include "splash.h"
 
+.include "routines/random.h"
 .include "routines/metasprite.h"
 
 
@@ -17,6 +18,9 @@ ROUTINE Main
 
 	LDA	#NMITIMEN_VBLANK_FLAG | NMITIMEN_AUTOJOY_FLAG
 	STA	NMITIMEN
+
+	LDXY	#$1de589c0		; source: random.org
+	STXY	Random__seed
 
 	MetaSprite_Init
 

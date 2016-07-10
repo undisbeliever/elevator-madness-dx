@@ -120,6 +120,7 @@ ROUTINE InitForLife
 ROUTINE GameLoop
 	REPEAT
 		JSR	Screen__WaitFrame
+		JSR	Random__AddJoypadEntropy
 
 		JSR	MetaSprite__InitLoop
 

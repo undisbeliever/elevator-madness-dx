@@ -100,6 +100,7 @@ ROUTINE FadeInOutScreen
 
 	REPEAT
 		JSR	Screen__WaitFrame
+		JSR	Random__AddJoypadEntropy
 
 		LDX	timer
 		DEX

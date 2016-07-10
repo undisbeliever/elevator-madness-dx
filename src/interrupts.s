@@ -39,7 +39,6 @@ ROUTINE VBlank
 	ENDIF
 
 	JSR	Controler__Update
-	JSR	Random__AddJoypadEntropy
 
 	; Load State
 	REP	#$30
