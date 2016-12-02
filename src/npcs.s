@@ -331,7 +331,6 @@ ROUTINE Spawn
 	; npc.feelings = 0
 	; npc.feelingsTimeout = NPC_FEELINGS_TIMEOUT
 	;
-	; ::TODO more than 1 sprite::
 	; npc.spriteCharAttr = businessManCharAttr
 	; npc.spriteTablePtr = MetaSprite_businessMan
 	; CalculateSpriteFramePtr()
@@ -414,7 +413,6 @@ ROUTINE Spawn
 	LDY	#NPC_FEELINGS_TIMEOUT
 	STY	NpcStruct::feelingsTimeout
 
-	; ::TODO random NPC sprite::
 	LDY	Npcs_SpriteCharAttr
 	STY	NpcStruct::spriteCharAttr
 	LDX	Npcs_SpriteFrameTablePtr
@@ -424,8 +422,6 @@ ROUTINE Spawn
 
 
 	; determine next sprite in line
-	; ::SHOULDO update `structure.inc` so this is neater::
-	; ::: (possibly ELSE_IF <check code> IF_* , AND_IF <check code> IF_* ?)::
 	LDY	#0
 	LDX	#npcs
 	REPEAT

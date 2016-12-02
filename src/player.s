@@ -448,8 +448,6 @@ ROUTINE	ContinueZapped
 	DEC	counter
 	JEQ	SetWalkingState
 
-	; ::TODO draw Zapped sprite::
-
 	RTS
 
 

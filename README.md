@@ -35,15 +35,6 @@ Controls
  * *A* - Move Elevator Downwards
 
 
-TODO
-====
- * Add more NPCs
- * High Score Table
- * Include Elevator Madness classic in ROM.
-   * Add dialog options.
- * Add sound
-
-
 Build Requirements
 ===================
  * ca65

@@ -131,7 +131,6 @@ ROUTINE _Init_Draw
 		JSR	DrawDoor
 		JSR	DrawLightOff
 		JSR	DrawSwitchOff
-		; ::TODO ClearArrows::
 
 		LDA	ElevatorStruct::floor
 		INC
@@ -930,8 +929,6 @@ ROUTINE	DrawRope
 .I16
 	LDY	ElevatorStruct::tileTable
 	LDX	a:ElevatorTilePositionTable::ropePos, Y
-
-	; ::TODO DIV8::
 
 	.assert ELEVATOR_ROPE_FRAME_DELAY = 4, error, "Invalid Division"
 	LDA	ElevatorStruct::ropePos

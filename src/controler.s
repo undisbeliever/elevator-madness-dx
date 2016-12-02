@@ -24,7 +24,6 @@ ROUTINE Update
 	; pressed = current & invertedPrevious
 	; invertedPrevious = current ^ 0xFFFF
 
-	; ::SHOULDDO UNTIL_BIT in structure::
 	LDA	#HVJOY_AUTOJOY
 _Update_loop:
 		BIT	HVJOY
