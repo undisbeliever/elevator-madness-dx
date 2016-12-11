@@ -99,7 +99,7 @@ IMPORT_MODULE Npcs
 	;; REQUIRES: 8 bit A, 16 bit Index
 	ROUTINE Process
 
-	;; Draws the NPCs to the metaSprite code
+	;; Draws the NPCs to the MetaSprite code
 	;;
 	;; REQUIRES: 8 bit A, 16 bit Index
 	ROUTINE	DrawSprites

@@ -36,9 +36,9 @@ PLAYER_JUMP_VELOCITY = 500		; Jumping velocity in 1/256 pixels / frame
 PLAYER_JUMP_HOLD = 20			; Number of frames to hold the jump for
 GRAVITY_PER_FRAME = 41			; Acceleration due to gravity in 1/256 pixels per frame per frame
 
-PLAYER_WALK_ANIMATION_DELAY = 10	; Number of frames inbetween walking frames.
-PLAYER_TURN_ANIMATION_DELAY = 7		; Number of frames inbetween turning frames.
-PLAYER_BUTTON_ANIMATION_DELAY = 6	; Number of frames to show the players hand presseing that button.
+PLAYER_WALK_ANIMATION_DELAY = 10	; Number of frames in-between walking frames.
+PLAYER_TURN_ANIMATION_DELAY = 7		; Number of frames in-between turning frames.
+PLAYER_BUTTON_ANIMATION_DELAY = 6	; Number of frames to show the players hand pressing that button.
 PLAYER_ZAPPED_ANIMATION_DELAY = 30	; Number of frames to show the player being zapped by the button.
 
 .enum
@@ -59,7 +59,7 @@ IMPORT_MODULE Player
 	;; Processes the player for a single frame.
 	ROUTINE Process
 
-	;; Draws the NPCs to the metaSprite code
+	;; Draws the NPCs to the MetaSprite code
 	;;
 	;; REQUIRES: 8 bit A, 16 bit Index
 	ROUTINE	DrawSprites

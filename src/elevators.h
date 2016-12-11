@@ -94,7 +94,7 @@ IMPORT_MODULE Elevators
 
 	;; Causes the elevator to move upwards if
 	;;
-	;;  * The Evelator's door is closed
+	;;  * The Elevator's door is closed
 	;; 
 	;; REQUIRE: 8 bit A, 16 bit Index
 	;; INPUT:
@@ -104,7 +104,7 @@ IMPORT_MODULE Elevators
 
 	;; Causes the elevator to move downwards if
 	;;
-	;;  * The Evelator's door is closed
+	;;  * The Elevator's door is closed
 	;; 
 	;; REQUIRE: 8 bit A, 16 bit Index
 	;; INPUT:

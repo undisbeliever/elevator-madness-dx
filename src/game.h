@@ -71,7 +71,7 @@ IMPORT_MODULE Game
 	WORD	newJoypadPressed
 
 
-	;; If this ptr is set then there is a Strike Against the player.
+	;; If this function pointer is set then there is a Strike Against the player.
 	;;
 	;; This pointer is to a routine that is called once per frame.
 	ADDR	strikeAntimationRoutinePtr

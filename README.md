@@ -1,7 +1,7 @@
 Elevator Madness DX
 ===================
 
-January's entry into the 1 Game Per Month Challange.
+January's entry into the 1 Game Per Month Challenge.
 
 This game is a modernization of my old LCD style game Elevator Madness.
 
@@ -20,7 +20,7 @@ This is a strike on your record. Three strikes and you are fired.
 To open the door, you must move to the correct control panel and press the *Y* button.
 
 To move the elevator up or down, you walk to *any* control panel and press *X* or *A*. Be aware, the elevator
-has no safetys and can crash into the roof or the ground. If the elevator has crashed, maintenance must be called, resulting
+has no safeties and can crash into the roof or the ground. If the elevator has crashed, maintenance must be called, resulting
 in a strike on your record
 
 Also, if an occupant ends up on the wrong floor, he will no doubt complain. This is another strike on your record.

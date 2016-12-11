@@ -1,4 +1,4 @@
-; Elevator Maddness DX game loop.
+; Elevator Madness DX game loop.
 
 .include "game.h"
 .include "npcs.h"

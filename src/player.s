@@ -323,7 +323,7 @@ SetPushButtonState_InFrontOfSwitch:
 
 	; NOTICE: The following code MUST not modify carry
 	; carry contains the which elevator is used.
-	; luckally BIT doesn't set carry
+	; luckily BIT doesn't set carry
 	REP	#$30
 .A16
 
@@ -457,7 +457,7 @@ ROUTINE SetJumpingState
 	; state = PLAYER_FALLING
 	;
 	; yVelocity = PLAYER_JUMP_VELOCITY
-	; conter = PLAYER_JUMP_HOLD
+	; counter = PLAYER_JUMP_HOLD
 	; standingIfZero = true
 	; metaSpriteFrame = facingRightOnZero ? jumpLeft : jumpRight
 	;

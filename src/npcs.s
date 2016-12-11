@@ -40,7 +40,7 @@ MODULE Npcs
 	;; If 0, then on left, if 1 on right
 	facingLeftOnZero	.byte
 
-	;; chatacter's frame
+	;; character's frame
 	;; 0 = stand, 1 = walk, 2 = wait
 	frame			.byte
 
@@ -51,7 +51,7 @@ MODULE Npcs
 	;; Timeout to next feeling change
 	feelingsTimeout		.word
 
-	;; MetaSprite charAttr diff pointer
+	;; MetaSprite charAttr diff word
 	spriteCharAttr		.word
 
 	;; Location of the MetaSprite Table.
@@ -60,7 +60,7 @@ MODULE Npcs
 	;; MetaSprite Frame Location
 	spriteFramePtr		.word
 
-	;; NPC directkly in front of this one. 0 If at head of line
+	;; NPC directly in front of this one. 0 If at head of line
 	nextNpcInLine		.addr
 
 	;; Frame timer for enter/exit elevator state
@@ -110,7 +110,7 @@ LABEL NpcStateTable
 ROUTINE Init
 	;; ::BUGFIX previous games NPCs still visible ::
 	;; ::: Have ABSOLUTELY NO CLUE why the old code didn't work. ::
-	;; ::: Just gave up after 20 mins and clear all the memory assosiated with NPCs ::
+	;; ::: Just gave up after 20 minutes and clear all the memory associated with NPCs ::
 	MemClear npcs
 
 	LDX	#NPC_FEELINGS_SPEED

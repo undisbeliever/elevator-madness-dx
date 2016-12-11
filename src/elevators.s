@@ -911,7 +911,7 @@ ROUTINE	DrawDoor
 
 
 
-;; Draws the elevtor's rope
+;; Draws the elevator's rope
 ;;
 ;; INPUT:
 ;;	DP = start of ElevatorStruct

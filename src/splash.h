@@ -29,7 +29,7 @@ IMPORT_MODULE Splash
 
 	;; Shows the Splash screen on the display.
 	;;
-	;; Also shows the controlls.
+	;; Also shows the controls.
 	;;
 	;; Mainly used to seed the random number generator.
 	;;

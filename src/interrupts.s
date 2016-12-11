@@ -1,4 +1,5 @@
-; Inturrupt Handlers for Elevator Madness DX
+; Interrupt Handlers for Elevator Madness DX
+
 .include "game.h"
 .include "controler.h"
 .include "routines/block.h"

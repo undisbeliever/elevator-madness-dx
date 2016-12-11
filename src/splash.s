@@ -1,4 +1,4 @@
-; Elevator Maddness DX Splash Screen.
+; Elevator Madness DX Splash Screen.
 ;
 ; Displays the Splash screen,
 ;
