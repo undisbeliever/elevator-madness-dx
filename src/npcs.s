@@ -348,7 +348,7 @@ ROUTINE Spawn
 	;			if x->xPos >= y->xPos
 	;				y = x
 	; npc.nextNpcInLine = y
-	; 
+	;
 	; // set state last so it doesn't interfear with with search above.
 	; npc.state = NPC_WALK_TO_ELEVATOR
 
@@ -678,7 +678,7 @@ ROUTINE WaitingInLine
 		LDX	NpcStruct::nextNpcInLine
 		IF_NOT_ZERO
 			JMP	SetFighting
-		ENDIF	
+		ENDIF
 	ENDIF
 
 	RTS
@@ -1100,7 +1100,7 @@ ROUTINE NpcOffscreen
 		INC
 		STA	feelingsSpeed
 	ENDIF
-	
+
 	;; ::SOUND award point::
 
 	RTS
@@ -1318,7 +1318,7 @@ ROUTINE	CalculateSpriteFramePtr
 
 
 
-;; Draws The Arrows of the NPCs request to the Player 
+;; Draws The Arrows of the NPCs request to the Player
 ; dp = npc
 .A8
 .I16
@@ -1375,7 +1375,7 @@ _DrawArrows_ToTilemap:
 	RTS
 
 
-;; Clears The Arrows of the NPCs request to the Player 
+;; Clears The Arrows of the NPCs request to the Player
 ; dp = npc
 .A8
 .I16

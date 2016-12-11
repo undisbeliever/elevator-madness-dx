@@ -153,7 +153,7 @@ ROUTINE Process
 	LDA	#.hibyte(leftElevator)
 	XBA
 	LDA	#.lobyte(leftElevator)
-	
+
 	TCD
 
 	LDX	ElevatorStruct::state
@@ -396,7 +396,7 @@ ROUTINE	NpcInsideElevator
 .A8
 .I16
 ROUTINE SetDoorClosed
-	; state = ELEVATOR_DOOR_CLOSED 
+	; state = ELEVATOR_DOOR_CLOSED
 	; elevator.drawDoor(DOOR_CLOSED_FRAME)
 	; play(DOOR_CLOSED_SOUND)
 
@@ -472,7 +472,7 @@ ROUTINE ContinueDoorOpening
 .A8
 .I16
 ROUTINE SetDoorOpen
-	; state = ELEVATOR_DOOR_OPEN 
+	; state = ELEVATOR_DOOR_OPEN
 	; elevator.drawDoor(DOOR_OPEN_FRAME)
 	; play(DOOR_OPEN_SOUND)
 	;
@@ -763,7 +763,7 @@ ROUTINE	DrawLightOn
 	STA	interactiveBgBuffer + 2, X
 
 	SEP	#$20
-.A8		
+.A8
 
 	RTS
 
@@ -793,7 +793,7 @@ ROUTINE	DrawLightOff
 	STZ	interactiveBgBuffer + 2, X
 
 	SEP	#$20
-.A8		
+.A8
 
 	RTS
 
@@ -857,7 +857,7 @@ ROUTINE	DrawSwitchOff
 	STA	interactiveBgBuffer, X
 
 	SEP	#$20
-.A8		
+.A8
 
 	RTS
 
@@ -901,7 +901,7 @@ ROUTINE	DrawDoor
 
 		.repeat ELEVATOR_DOOR_HEIGHT, column
 			STA	interactiveBgBuffer + column * 64 + row * 2, X
-		.endrepeat		
+		.endrepeat
 	.endrepeat
 
 	SEP	#$20
@@ -946,7 +946,7 @@ ROUTINE	DrawRope
 
 	RTS
 
-	
+
 .rodata
 
 LABEL LeftElevatorTilePositionTable
@@ -965,7 +965,7 @@ LABEL LeftElevatorTilePositionTable
 	; Rope Position
 	.addr ELEVATOR_LEFT_ROPE_ROW * 2
 	; Rope Offset
-	.word ELEVATOR_LEFT_ROPE_TILE_OFFSET 
+	.word ELEVATOR_LEFT_ROPE_TILE_OFFSET
 	; Tiles
 	.word ELEVATOR_SWITCH_ON_TILE
 	.word ELEVATOR_SWITCH_OFF_TILE
@@ -988,7 +988,7 @@ LABEL RightElevatorTilePositionTable
 	; Rope Position
 	.addr ELEVATOR_RIGHT_ROPE_ROW * 2
 	; Rope Offset
-	.word ELEVATOR_RIGHT_ROPE_TILE_OFFSET 
+	.word ELEVATOR_RIGHT_ROPE_TILE_OFFSET
 	; Tiles
 	.word ELEVATOR_SWITCH_ON_TILE | TILEMAP_H_FLIP_FLAG
 	.word ELEVATOR_SWITCH_OFF_TILE | TILEMAP_H_FLIP_FLAG

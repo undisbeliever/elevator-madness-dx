@@ -151,7 +151,7 @@ ROUTINE StrikeAnimation
 	;	StrikeAnimationFrame()
 	;	strikeTimeout--
 	; until strikeTimeout == 0
-	; 
+	;
 	; strikeTimeout = STRIKE_TIMEOUT
 	; repeat
 	;	StrikeAnimationFrame()
@@ -232,7 +232,7 @@ ROUTINE DrawScore
 		TXA
 		ADD	#SCORE_DIGIT_DELTA
 		STA	interactiveBgBuffer + SCORE_TILE_COLUMN * 32 * 2 + (SCORE_TILE_ROW + 3 - i) * 2
-	
+
 		LDA	#SCORE_TILE_ATTR
 		STA	interactiveBgBuffer + SCORE_TILE_COLUMN * 32 * 2 + (SCORE_TILE_ROW + 3 - i) * 2 + 1
 	.endrepeat

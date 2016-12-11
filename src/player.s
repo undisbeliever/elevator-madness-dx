@@ -424,7 +424,7 @@ ROUTINE SetPlayerZapped
 
 	LDA	#PLAYER_ZAPPED_ANIMATION_DELAY
 	STA	counter
-	
+
 
 	LDA	facingRightOnZero
 	IF_NOT_ZERO
