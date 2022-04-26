@@ -1,6 +1,8 @@
 
-TILES = $(patsubst %.pcx,%.4bpp,$(wildcard *.pcx))
+# MetaSprite tiles
+TILES = $(patsubst %.pcx,%.4bpp,$(wildcard metasprites/*.pcx))
 PALETTES =  $(patsubst %.4bpp,%.clr,$(TILES))
+
 
 .PHONY: ALL
 
